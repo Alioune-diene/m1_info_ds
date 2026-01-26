@@ -17,17 +17,19 @@ public class ServerCalculator implements IServerCalculator {
         try (
             ServerSocket serverSocket = new ServerSocket(portNumber);
             Socket clientSocket = serverSocket.accept();
-            DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
-            DataInputStream in = new DataInputStream(clientSocket.getInputStream())
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         ) {
             System.out.println("Client connected!");
 
             while (true) {
                 try {
-                    int op = in.readInt();
-                    int a = in.readInt();
-                    int b = in.readInt();
+                    System.out.println("Waiting for operation...");
+                    int op = Integer.parseInt(in.readLine());
+                    int a = Integer.parseInt(in.readLine());
+                    int b = Integer.parseInt(in.readLine());
                     int result;
+                    System.out.printf("Received operation %d with operands %d and %d%n", op, a, b);
 
                     EOperationType operation = EOperationType.values()[op];
 
@@ -39,9 +41,10 @@ public class ServerCalculator implements IServerCalculator {
                         default -> 0;
                     };
 
-                    out.writeInt(result);
+                    out.println(result);
                     out.flush();
 
+                    System.out.printf("Sent result: %d%n", result);
                 } catch (EOFException e) {
                     break;
                 }
