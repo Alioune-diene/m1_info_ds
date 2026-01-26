@@ -1,4 +1,4 @@
-
+package fr.uga.im2ag.m1info.lab1.calculator;
 
 interface IServerCalculator {
     public int plus(int a, int b);
