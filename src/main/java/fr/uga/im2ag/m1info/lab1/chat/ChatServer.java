@@ -78,8 +78,7 @@ class ClientHandler implements Runnable {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            // Ask for username and register
-            out.println("Enter username:");
+            out.println("Enter username: ");
             this.username = in.readLine();
 
             if (this.username == null || this.username.trim().isEmpty()) {
@@ -99,7 +98,7 @@ class ClientHandler implements Runnable {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 if (inputLine.equals("LIST")) {
-                    out.println("USERS " + ChatServer.getClientList());
+                    out.println("USERS: " + ChatServer.getClientList());
 
                 } else if (inputLine.startsWith("SEND ")) {
                     // Split: "SEND bob hello world" -> ["SEND", "bob", "hello world"]
