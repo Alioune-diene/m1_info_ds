@@ -3,16 +3,17 @@ package fr.uga.im2ag.m1info.lab2.hello2;
 
 import java.rmi.RemoteException;
 
-public  class HelloImpl implements Hello {
+public class HelloImpl implements Hello {
 
-	private String message;
- 
-	public HelloImpl(String s) {
-		message = s ;
-	}
+    private String message;
 
-	public String sayHello() throws RemoteException {
-		return message ;
-	}
+    public HelloImpl(String s) {
+        message = s;
+    }
+
+    public String sayHello(Info_itf client) throws RemoteException {
+        System.out.println("sayHello called by " + client.getName());
+        return message;
+    }
 }
 
