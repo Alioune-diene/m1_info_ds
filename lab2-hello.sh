@@ -8,8 +8,8 @@
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CP="$PROJECT_DIR/target/classes"
-PKG="fr.uga.im2ag.m1info.lab2.hello"
-PORT="${PORT:-1099}"
+PKG="fr.uga.im2ag.m1info.lab2.hello2"
+PORT="${PORT:-1200}"
 HOST="${HOST:-localhost}"
 
 case "$1" in
@@ -26,9 +26,7 @@ case "$1" in
 
   registry)
     echo "==> Starting rmiregistry on port $PORT (background)..."
-    cd "$CP" && rmiregistry "$PORT" &
-    echo "    PID: $!"
-    echo "    To stop: kill $!"
+    cd "$CP" && rmiregistry "$PORT"
     ;;
 
   server)
@@ -38,7 +36,7 @@ case "$1" in
 
   client)
     echo "==> Starting HelloClient (host=$HOST, port=$PORT)..."
-    java -cp "$CP" "$PKG.HelloClient" "$HOST" "$PORT"
+    java -cp "$CP" "$PKG.HelloClient" "$HOST" "$PORT" "$PORT"
     ;;
 
   *)
