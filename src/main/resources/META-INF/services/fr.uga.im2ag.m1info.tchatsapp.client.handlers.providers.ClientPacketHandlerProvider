@@ -1,0 +1,5 @@
+fr.uga.im2ag.m1info.tchatsapp.client.handlers.providers.AckConnectionHandlerProvider
+fr.uga.im2ag.m1info.tchatsapp.client.handlers.providers.AckMessageHandlerProvider
+fr.uga.im2ag.m1info.tchatsapp.client.handlers.providers.ConversationMessageHandlerProvider
+fr.uga.im2ag.m1info.tchatsapp.client.handlers.providers.ManagementMessageHandlerProvider
+fr.uga.im2ag.m1info.tchatsapp.client.handlers.providers.ContactRequestHandlerProvider
