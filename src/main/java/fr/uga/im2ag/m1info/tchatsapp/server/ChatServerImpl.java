@@ -10,11 +10,22 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.File;
+
 public class ChatServerImpl extends UnicastRemoteObject implements IChatServer {
     private final Map<String, IChatClient> clients = new ConcurrentHashMap<>();
-    private final List<String> history = Collections.synchronizedList(new ArrayList<>());
+    private final List<String> history;
+    private static final String HISTORY_FILE = "chat_history.dat";
+
     public ChatServerImpl() throws RemoteException {
         super();
+        history = Collections.synchronizedList(loadHistory());
+        System.out.println("Loaded " + history.size() + " messages from history.");
     }
 
     @Override
@@ -34,6 +45,7 @@ public class ChatServerImpl extends UnicastRemoteObject implements IChatServer {
     @Override
     public void sendMessage(String username, String message) throws RemoteException {
         history.add(username + ": " + message);
+        saveHistory();
         broadcast(username, message);
     }
 
@@ -57,5 +69,25 @@ public class ChatServerImpl extends UnicastRemoteObject implements IChatServer {
         }
     }
 
+    private void saveHistory() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(HISTORY_FILE))) {
+            oos.writeObject(new ArrayList<>(history));
+        } catch (IOException e) {
+            System.err.println("Failed to save history: " + e.getMessage());
+        }
+    }
 
+    @SuppressWarnings("unchecked")
+    private ArrayList<String> loadHistory() {
+        File file = new File(HISTORY_FILE);
+        if (!file.exists()) {
+            return new ArrayList<>();
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            return (ArrayList<String>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Failed to load history: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
 }
