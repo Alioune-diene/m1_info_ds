@@ -9,11 +9,11 @@ public class ConversationClientRepository extends AbstractRepository<String, Con
 
 
     public ConversationClientRepository(Map<String, ConversationClient> conversations) {
-        super(conversations, "conversationClientRepository");
+        super(conversations);
     }
 
     public ConversationClientRepository() {
-        super("conversationClientRepository");
+        super();
     }
 
     @Override

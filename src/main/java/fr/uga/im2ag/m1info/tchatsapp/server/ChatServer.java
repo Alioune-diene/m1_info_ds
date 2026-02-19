@@ -1,15 +1,17 @@
 package fr.uga.im2ag.m1info.tchatsapp.server;
 
 import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.ProtocolMessage;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.GroupInfo;
 import fr.uga.im2ag.m1info.tchatsapp.common.rmi.IChatClient;
 import fr.uga.im2ag.m1info.tchatsapp.common.rmi.IChatServer;
 import fr.uga.im2ag.m1info.tchatsapp.server.handlers.ServerHandlerContext;
-import fr.uga.im2ag.m1info.tchatsapp.server.model.UserInfo;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.UserInfo;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -73,6 +75,53 @@ public class ChatServer extends UnicastRemoteObject implements IChatServer {
     public void disconnect(int clientId) throws RemoteException {
         context.unregisterClient(clientId);
         LOG.info("Client disconnected: id=" + clientId);
+    }
+
+    @Override
+    public Set<UserInfo> getContacts(int clientId) throws RemoteException {
+        UserInfo user = context.getUserRepository().findById(clientId);
+        if (user == null) {
+            LOG.warning("User not found for client id " + clientId);
+            return Set.of();
+        }
+
+        return user.getContacts().stream()
+                .map(contactId -> {
+                    UserInfo contact = context.getUserRepository().findById(contactId);
+                    if (contact != null) {
+                        return new UserInfo(contact.getId(), contact.getUsername(), new HashSet<>(), contact.getLastLogin());
+                    } else {
+                        LOG.warning("Contact not found for id " + contactId);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(java.util.stream.Collectors.toSet());
+
+    }
+
+    @Override
+    public String getClientPseudo(int clientId) throws RemoteException {
+        UserInfo user = context.getUserRepository().findById(clientId);
+        if (user == null) {
+            LOG.warning("User not found for client id " + clientId);
+            return null;
+        }
+
+        return user.getUsername();
+    }
+
+    @Override
+    public Set<GroupInfo> getGroups(int clientId) throws RemoteException {
+        UserInfo user = context.getUserRepository().findById(clientId);
+        if (user == null) {
+            LOG.warning("User not found for client id " + clientId);
+            return Set.of();
+        }
+
+        return context.getGroupRepository().findAll().stream()
+                .filter(group -> group.hasMember(clientId))
+                .collect(java.util.stream.Collectors.toSet());
     }
 
     public ChatServerContext getContext() {

@@ -2,7 +2,7 @@ package fr.uga.im2ag.m1info.tchatsapp.server.handlers;
 
 import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.ProtocolMessage;
 import fr.uga.im2ag.m1info.tchatsapp.server.ChatServerContext;
-import fr.uga.im2ag.m1info.tchatsapp.server.model.UserInfo;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.UserInfo;
 import fr.uga.im2ag.m1info.tchatsapp.server.util.AckHelper;
 
 public abstract class ValidatingServerMessageHandler extends ServerMessageHandler {

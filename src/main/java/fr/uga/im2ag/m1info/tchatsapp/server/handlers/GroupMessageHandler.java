@@ -9,7 +9,7 @@ import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.MessageFactory;
 import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.ProtocolMessage;
 import fr.uga.im2ag.m1info.tchatsapp.common.model.GroupInfo;
 import fr.uga.im2ag.m1info.tchatsapp.server.ChatServerContext;
-import fr.uga.im2ag.m1info.tchatsapp.server.model.UserInfo;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.UserInfo;
 import fr.uga.im2ag.m1info.tchatsapp.server.util.AckHelper;
 
 public class GroupMessageHandler extends ServerMessageHandler {

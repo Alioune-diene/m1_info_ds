@@ -6,11 +6,11 @@ import java.util.Map;
 
 public class GroupRepository extends AbstractRepository<Integer, GroupInfo> {
     public GroupRepository(Map<Integer, GroupInfo> groups) {
-        super(groups, "groupRepository");
+        super(groups);
     }
 
     public GroupRepository() {
-        super("groupRepository");
+        super();
     }
 
     @Override

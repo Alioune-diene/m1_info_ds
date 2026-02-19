@@ -3,7 +3,7 @@ package fr.uga.im2ag.m1info.tchatsapp.server.handlers;
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
 import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.*;
 import fr.uga.im2ag.m1info.tchatsapp.server.ChatServerContext;
-import fr.uga.im2ag.m1info.tchatsapp.server.model.UserInfo;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.UserInfo;
 import fr.uga.im2ag.m1info.tchatsapp.server.util.AckHelper;
 
 import java.util.Map;

@@ -10,6 +10,8 @@ import fr.uga.im2ag.m1info.tchatsapp.client.repository.ContactClientRepository;
 import fr.uga.im2ag.m1info.tchatsapp.client.repository.ConversationClientRepository;
 import fr.uga.im2ag.m1info.tchatsapp.common.*;
 import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.*;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.GroupInfo;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.UserInfo;
 import fr.uga.im2ag.m1info.tchatsapp.common.repository.GroupRepository;
 
 import java.io.IOException;
@@ -24,6 +26,8 @@ import java.time.Instant;
  * This class encapsulates the client and provides controlled access to its operations.
  */
 public class ClientController {
+    private static final java.util.logging.Logger LOG = java.util.logging.Logger.getLogger(ClientController.class.getName());
+
     private final Client client;
     private volatile boolean connectionEstablished;
     private volatile String lastErrorMessage;
@@ -88,12 +92,28 @@ public class ClientController {
         boolean result = client.connect(host, port, username);
         if (result) {
             connectionEstablished = true;
-            activeUser.setPseudo(username);
+            String pseudo = client.getPseudo();
+            activeUser.setPseudo(pseudo);
 
-            boolean isNewUser = (client.getClientId() != 0);
-            publishEvent(new ConnectionEstablishedEvent(this, client.getClientId(), username, isNewUser));
+            publishEvent(new ConnectionEstablishedEvent(this, client.getClientId(), pseudo, pseudo.equals(username)));
+
+            initializeUserData();
         }
         return result;
+    }
+
+    private void initializeUserData() {
+        for (UserInfo userInfo : client.getContacts()) {
+            contactRepository.add(new ContactClient(userInfo.getId(), userInfo.getUsername()));
+            getOrCreatePrivateConversation(userInfo.getId());
+            LOG.info("Added contact: " + userInfo.getUsername() + " (ID: " + userInfo.getId() + ")");
+        }
+
+        for (GroupInfo groupInfo : client.getGroups()) {
+            groupRepository.add(groupInfo);
+            getOrCreateGroupConversation(groupInfo.getGroupId());
+            LOG.info("Added group: " + groupInfo.getGroupName() + " (ID: " + groupInfo.getGroupId() + ")");
+        }
     }
 
     /**

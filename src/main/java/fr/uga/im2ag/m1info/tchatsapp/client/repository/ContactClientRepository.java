@@ -25,7 +25,7 @@ public class ContactClientRepository extends AbstractRepository<Integer, Contact
                                    Map<String, ContactRequest> pendingRequests,
                                    Map<Integer, String> sentRequests,
                                    Map<Integer, String> receivedRequests) {
-        super(contacts, "contactClientRepository");
+        super(contacts);
         this.pendingRequests = pendingRequests;
         this.sentRequests = sentRequests;
         this.receivedRequests = receivedRequests;

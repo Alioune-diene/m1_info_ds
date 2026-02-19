@@ -1,4 +1,4 @@
-package fr.uga.im2ag.m1info.tchatsapp.server.model;
+package fr.uga.im2ag.m1info.tchatsapp.common.model;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -13,7 +13,6 @@ public class UserInfo implements Serializable {
     private String username;
     private final Set<Integer> contacts;
     private long lastLogin;
-    private byte[] publicKey;
 
     /**
      * Constructs a UserInfo instance with all fields specified.
@@ -28,7 +27,6 @@ public class UserInfo implements Serializable {
         this.username = username;
         this.contacts = contacts;
         this.lastLogin = lastLogin;
-        this.publicKey = null;
     }
 
     /**
@@ -98,23 +96,6 @@ public class UserInfo implements Serializable {
         return lastLogin;
     }
 
-    /**
-     * Checks if the user has a public key set.
-     *
-     * @return true if a public key is set, false otherwise
-     */
-    public boolean hasPublicKey() {
-        return publicKey != null && publicKey.length > 0;
-    }
-
-    /** Gets the public key in byte array form.
-     *
-     * @return the public key byte array
-     */
-    public byte[] getPublicKey() {
-        return publicKey;
-    }
-
     /** Sets the username.
      *
      * @param username the new username
@@ -142,13 +123,5 @@ public class UserInfo implements Serializable {
     /** Updates the last login timestamp to the current time. */
     public void updateLastLogin() {
         this.lastLogin = System.currentTimeMillis();
-    }
-
-    /** Sets the public key from a byte array.
-     *
-     * @param publicKey the public key byte array
-     */
-    public void setPublicKey(byte[] publicKey) {
-        this.publicKey = publicKey;
     }
 }

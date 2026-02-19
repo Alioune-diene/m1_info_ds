@@ -14,6 +14,8 @@ package fr.uga.im2ag.m1info.tchatsapp.client;
 import fr.uga.im2ag.m1info.tchatsapp.client.command.PendingCommandManager;
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageProcessor;
 import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.*;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.GroupInfo;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.UserInfo;
 import fr.uga.im2ag.m1info.tchatsapp.common.rmi.IChatClient;
 import fr.uga.im2ag.m1info.tchatsapp.common.rmi.IChatServer;
 
@@ -21,6 +23,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class Client implements IChatClient {
@@ -151,5 +154,44 @@ public class Client implements IChatClient {
 
     public IChatServer getServerStub() {
         return serverStub;
+    }
+
+    public String getPseudo() {
+        try {
+            if (serverStub != null && connected) {
+                return serverStub.getClientPseudo(clientId);
+            } else {
+                throw new IllegalStateException("Not connected to server");
+            }
+        } catch (RemoteException e) {
+            LOG.severe("Failed to get pseudo: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public Set<UserInfo> getContacts() {
+        try {
+            if (serverStub != null && connected) {
+                return serverStub.getContacts(clientId);
+            } else {
+                throw new IllegalStateException("Not connected to server");
+            }
+        } catch (RemoteException e) {
+            LOG.severe("Failed to get contacts: " + e.getMessage());
+            return Set.of();
+        }
+    }
+
+    public Set<GroupInfo> getGroups() {
+        try {
+            if (serverStub != null && connected) {
+                return serverStub.getGroups(clientId);
+            } else {
+                throw new IllegalStateException("Not connected to server");
+            }
+        } catch (RemoteException e) {
+            LOG.severe("Failed to get groups: " + e.getMessage());
+            return Set.of();
+        }
     }
 }

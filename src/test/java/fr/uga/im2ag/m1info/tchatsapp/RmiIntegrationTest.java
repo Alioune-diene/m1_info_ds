@@ -2,12 +2,11 @@ package fr.uga.im2ag.m1info.tchatsapp;
 
 import fr.uga.im2ag.m1info.tchatsapp.client.Client;
 import fr.uga.im2ag.m1info.tchatsapp.client.ClientController;
-import fr.uga.im2ag.m1info.tchatsapp.client.event.system.EventBus;
 import fr.uga.im2ag.m1info.tchatsapp.client.event.system.ExecutionMode;
 import fr.uga.im2ag.m1info.tchatsapp.client.event.types.TextMessageReceivedEvent;
 import fr.uga.im2ag.m1info.tchatsapp.client.model.ContactClient;
 import fr.uga.im2ag.m1info.tchatsapp.server.ChatServer;
-import fr.uga.im2ag.m1info.tchatsapp.server.model.UserInfo;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.UserInfo;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;

@@ -282,6 +282,7 @@ public class MainFrame extends JFrame {
         // Initialize group member pending for a group created on the request of the user
         this.pendingGroupParticipants = new HashMap<>();
     }
+
     private void onConnectionSuccess(int clientId, String pseudo, boolean isNewUser) {
 
         loginPanel.clearError();
@@ -294,11 +295,19 @@ public class MainFrame extends JFrame {
                     "Bienvenue",
                     JOptionPane.INFORMATION_MESSAGE
             );
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Connexion réussie !\nBon retour, " + pseudo + " (ID: " + clientId + ") !",
+                    "Bon retour",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
         }
 
         setTitle("TchatApp - " + pseudo);
         homePanel.setUserPseudo(pseudo);
         showHome();
+        refreshHomeConversations();
     }
 
     private void onConnectionError(String errorMessage) {
