@@ -2,10 +2,15 @@ package fr.uga.im2ag.m1info.tchatsapp.common.messagefactory;
 
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
 
+import java.io.Serial;
+
 /**
  * Message representing a contact response.
  */
-public class ContactRequestResponseMessage extends AbstractSerializableMessage {
+public class ContactRequestResponseMessage extends ProtocolMessage {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private String requestId;
     private boolean accepted;
 
@@ -58,23 +63,5 @@ public class ContactRequestResponseMessage extends AbstractSerializableMessage {
     public ContactRequestResponseMessage setAccepted(boolean accepted) {
         this.accepted = accepted;
         return this;
-    }
-
-    // ========================= Serialization Methods =========================
-
-    @Override
-    protected void serializeContent(StringBuilder sb) {
-        joinFields(sb, requestId != null ? requestId : messageId, accepted ? "1" : "0");
-    }
-
-    @Override
-    protected void deserializeContent(String[] parts, int startIndex) {
-        this.requestId = parts[startIndex];
-        this.accepted = "1".equals(parts[startIndex + 1]);
-    }
-
-    @Override
-    protected int getExpectedPartCount() {
-        return 4;
     }
 }

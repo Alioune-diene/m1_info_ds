@@ -2,13 +2,17 @@ package fr.uga.im2ag.m1info.tchatsapp.common.messagefactory;
 
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
 
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.Base64;
 
 /**
  * Class representing a media message in the chat service protocol.
  */
-public class MediaMessage extends AbstractSerializableMessage {
+public class MediaMessage extends ProtocolMessage {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private byte[] content;
     private String mediaName;
     private String replyToMessageId;
@@ -91,25 +95,6 @@ public class MediaMessage extends AbstractSerializableMessage {
     }
 
     // ========================= Serialization Methods =========================
-
-    @Override
-    protected void serializeContent(StringBuilder sb) {
-        joinFields(sb, replyToMessageId != null ? replyToMessageId : "", mediaName,
-                Base64.getEncoder().encodeToString(Arrays.copyOfRange(content, 0, size)));
-    }
-
-    @Override
-    protected void deserializeContent(String[] parts, int startIndex) {
-        this.replyToMessageId = parts[startIndex].isEmpty() ? null : parts[startIndex];
-        this.mediaName = parts[startIndex + 1];
-        this.content = Base64.getDecoder().decode(parts[startIndex + 2]);
-        this.size = content.length;
-    }
-
-    @Override
-    protected int getExpectedPartCount() {
-        return 5;
-    }
 
     @Override
     public String toString() {

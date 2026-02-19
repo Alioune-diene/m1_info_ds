@@ -2,9 +2,12 @@ package fr.uga.im2ag.m1info.tchatsapp.common.messagefactory;
 
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
 
+import java.io.Serial;
 import java.time.Instant;
 
-public class ReactionMessage extends AbstractSerializableMessage {
+public class ReactionMessage extends ProtocolMessage {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private String content;
     private String reactionToMessageId;
@@ -34,22 +37,6 @@ public class ReactionMessage extends AbstractSerializableMessage {
     public ReactionMessage setReactionToMessageId(String reactionToMessageId) {
         this.reactionToMessageId = reactionToMessageId;
         return this;
-    }
-
-    @Override
-    protected void serializeContent(StringBuilder sb) {
-        joinFields(sb, reactionToMessageId, content);
-    }
-
-    @Override
-    protected void deserializeContent(String[] parts, int startIndex) {
-        this.reactionToMessageId = parts[startIndex];
-        this.content = parts[startIndex + 1];
-    }
-
-    @Override
-    protected int getExpectedPartCount() {
-        return 4;
     }
 
     @Override

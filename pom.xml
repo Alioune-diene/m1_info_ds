@@ -39,13 +39,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Cryptography -->
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk18on</artifactId>
-            <version>1.79</version>
-        </dependency>
-
         <!-- JSON for storage -->
         <dependency>
             <groupId>com.google.code.gson</groupId>

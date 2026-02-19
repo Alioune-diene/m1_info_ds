@@ -10,8 +10,6 @@ public class ManagementMessageProvider implements MessageProvider {
     @Override
     public Set<MessageType> getType() {
         return Set.of(
-                MessageType.CREATE_USER,
-                MessageType.CONNECT_USER,
                 MessageType.ACK_CONNECTION,
                 MessageType.REMOVE_CONTACT,
                 MessageType.CREATE_GROUP,

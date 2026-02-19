@@ -2,7 +2,6 @@ package fr.uga.im2ag.m1info.tchatsapp.common.messagefactory;
 
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageIdGenerator;
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
-import fr.uga.im2ag.m1info.tchatsapp.common.Packet;
 import fr.uga.im2ag.m1info.tchatsapp.common.ShaIdGenerator;
 import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.providers.MessageProvider;
 
@@ -47,24 +46,6 @@ public class MessageFactory {
         messageIdGenerator = generator;
     }
 
-    /** Create a ProtocolMessage from a Packet.
-     *
-     * @param packet the Packet to convert
-     * @return the corresponding ProtocolMessage
-     * @throws IllegalArgumentException if the MessageType is unknown
-     */
-    public static ProtocolMessage fromPacket(Packet packet) {
-        MessageType type = packet.messageType();
-        Supplier<ProtocolMessage> constructor = registry.get(type);
-        if (constructor == null) {
-            LOG.severe("Unknown message type: " + type);
-            throw new IllegalArgumentException("Unknown message type: " + type);
-        }
-        ProtocolMessage msg = constructor.get();
-        msg.fromPacket(packet);
-        return msg;
-    }
-
     /** Create a ProtocolMessage of a given type with specified sender and recipient.
      *
      * @param type the MessageType of the message
@@ -85,21 +66,5 @@ public class MessageFactory {
         msg.setMessageType(type);
         msg.generateNewMessageId(messageIdGenerator);
         return msg;
-    }
-
-    /** Create an empty ProtocolMessage of a given type.
-     *
-     * <p>Used by {@link EncryptedWrapper#unwrap} to reconstruct the original message after decryption.</p>
-     *
-     * @param type the MessageType of the message
-     * @return the constructed ProtocolMessage
-     * @throws IllegalArgumentException if the MessageType is unknown
-     */
-    public static ProtocolMessage createEmpty(MessageType type) {
-        Supplier<ProtocolMessage> supplier = registry.get(type);
-        if (supplier == null) {
-            throw new IllegalArgumentException("Unknown message type: " + type);
-        }
-        return supplier.get();
     }
 }

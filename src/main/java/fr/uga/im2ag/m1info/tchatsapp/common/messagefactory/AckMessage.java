@@ -5,6 +5,7 @@ import fr.uga.im2ag.m1info.tchatsapp.common.MessageStatus;
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
 import fr.uga.im2ag.m1info.tchatsapp.common.TypeConverter;
 
+import java.io.Serial;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,10 @@ import java.util.Map;
  * Message representing an acknowledgment for another message.
  * Used to track message delivery and read status.
  */
-public class AckMessage extends AbstractSerializableMessage {
+public class AckMessage extends ProtocolMessage {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private static final Gson gson = new Gson();
 
     private String acknowledgedMessageId;
@@ -145,39 +149,5 @@ public class AckMessage extends AbstractSerializableMessage {
      */
     public Map<String, Object> getAdditionalData() {
         return Map.copyOf(additionalData);
-    }
-
-    // ========================= Serialization Methods =========================
-
-    @Override
-    protected void serializeContent(StringBuilder sb) {
-        joinFields(sb,
-                acknowledgedMessageId,
-                Byte.toString(ackType.toByte()),
-                ackType == MessageStatus.FAILED && errorReason != null ? errorReason : "",
-                gson.toJson(additionalData)
-        );
-    }
-
-    @Override
-    protected void deserializeContent(String[] parts, int startIndex) {
-        this.acknowledgedMessageId = parts[startIndex];
-        this.ackType = MessageStatus.fromByte(Byte.parseByte(parts[startIndex + 1]));
-        if (ackType == MessageStatus.FAILED && parts.length > startIndex + 2) {
-            this.errorReason = parts[startIndex + 2];
-        } else {
-            this.errorReason = null;
-        }
-        if (parts.length > startIndex + 3 && !parts[startIndex + 3].isEmpty()) {
-            Type type = new com.google.gson.reflect.TypeToken<Map<String, Object>>(){}.getType();
-            Map<String, Object> parsed = gson.fromJson(parts[startIndex + 3], type);
-            additionalData.clear();
-            additionalData.putAll(parsed);
-        }
-    }
-
-    @Override
-    protected int getExpectedPartCount() {
-        return 6;
     }
 }

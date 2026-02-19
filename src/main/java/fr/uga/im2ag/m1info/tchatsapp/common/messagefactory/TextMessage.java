@@ -2,13 +2,17 @@ package fr.uga.im2ag.m1info.tchatsapp.common.messagefactory;
 
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
 
+import java.io.Serial;
 import java.time.Instant;
 
 /**
  * A text message that can contain plain text content and optionally reference
  * another message it is replying to.
  */
-public class TextMessage extends AbstractSerializableMessage {
+public class TextMessage extends ProtocolMessage {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private String content;
     private String replyToMessageId;
 
@@ -64,22 +68,6 @@ public class TextMessage extends AbstractSerializableMessage {
     }
 
     // ========================= Serialization Methods =========================
-
-    @Override
-    protected void serializeContent(StringBuilder sb) {
-        joinFields(sb, replyToMessageId != null ? replyToMessageId : "", content);
-    }
-
-    @Override
-    protected void deserializeContent(String[] parts, int startIndex) {
-        this.replyToMessageId = parts[startIndex].isEmpty() ? null : parts[startIndex];
-        this.content = parts[startIndex + 1];
-    }
-
-    @Override
-    protected int getExpectedPartCount() {
-        return 4;
-    }
 
     @Override
     public String toString() {

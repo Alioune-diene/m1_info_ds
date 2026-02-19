@@ -35,7 +35,6 @@ public interface MessageProvider {
      *
      * @return a new ProtocolMessage instance
      */
-    @Deprecated
     ProtocolMessage createInstance();
 
     /**

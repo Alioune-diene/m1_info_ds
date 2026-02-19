@@ -2,10 +2,15 @@ package fr.uga.im2ag.m1info.tchatsapp.common.messagefactory;
 
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
 
+import java.io.Serial;
+
 /**
  * Message representing a contact request.
  */
-public class ContactRequestMessage extends AbstractSerializableMessage {
+public class ContactRequestMessage extends ProtocolMessage {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private String requestId;
     private long expirationTimestamp;
 
@@ -58,23 +63,5 @@ public class ContactRequestMessage extends AbstractSerializableMessage {
     public ContactRequestMessage setExpirationTimestamp(long expirationTimestamp) {
         this.expirationTimestamp = expirationTimestamp;
         return this;
-    }
-
-    // ========================= Serialization Methods =========================
-
-    @Override
-    protected void serializeContent(StringBuilder sb) {
-        joinFields(sb, getRequestId(), Long.toString(expirationTimestamp));
-    }
-
-    @Override
-    protected void deserializeContent(String[] parts, int startIndex) {
-        this.requestId = parts[startIndex];
-        this.expirationTimestamp = Long.parseLong(parts[startIndex + 1]);
-    }
-
-    @Override
-    protected int getExpectedPartCount() {
-        return 4;
     }
 }

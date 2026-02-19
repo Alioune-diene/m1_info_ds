@@ -2,14 +2,18 @@ package fr.uga.im2ag.m1info.tchatsapp.common.messagefactory;
 
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageIdGenerator;
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
-import fr.uga.im2ag.m1info.tchatsapp.common.Packet;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.Instant;
 
 /**
  * Abstract class representing a protocol message in the chat service.
  */
-public abstract class ProtocolMessage {
+public abstract class ProtocolMessage implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private static final ThreadLocal<StringBuilder> STRING_BUILDER = ThreadLocal.withInitial(StringBuilder::new);
 
     protected static StringBuilder getStringBuilder() {
@@ -24,9 +28,6 @@ public abstract class ProtocolMessage {
 
     protected String messageId;
     protected Instant timestamp;
-
-    public abstract Packet toPacket();
-    public abstract ProtocolMessage fromPacket(Packet packet);
 
     /** Constructor for ProtocolMessage.
      *

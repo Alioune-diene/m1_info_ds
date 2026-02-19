@@ -5,13 +5,17 @@ import com.google.gson.reflect.TypeToken;
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
 import fr.uga.im2ag.m1info.tchatsapp.common.TypeConverter;
 
+import java.io.Serial;
 import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
  * Class representing a management message in the chat service protocol.
  */
-public class ManagementMessage extends AbstractSerializableMessage {
+public class ManagementMessage extends ProtocolMessage {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private static final Gson gson = new Gson();
     private final Map<String, Object> params;
 
@@ -67,26 +71,6 @@ public class ManagementMessage extends AbstractSerializableMessage {
     }
 
     // ========================= Serialization Methods =========================
-
-    @Override
-    protected void serializeContent(StringBuilder sb) {
-        sb.append(gson.toJson(params));
-    }
-
-    @Override
-    protected void deserializeContent(String[] parts, int startIndex) {
-        if (parts.length > startIndex && !parts[startIndex].isEmpty()) {
-            Type type = new TypeToken<Map<String, Object>>(){}.getType();
-            Map<String, Object> parsed = gson.fromJson(parts[startIndex], type);
-            params.clear();
-            params.putAll(parsed);
-        }
-    }
-
-    @Override
-    protected int getExpectedPartCount() {
-        return 3;
-    }
 
     @Override
     public String toString() {
