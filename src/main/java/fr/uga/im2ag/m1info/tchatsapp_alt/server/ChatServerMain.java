@@ -1,4 +1,4 @@
-package fr.uga.im2ag.m1info.tchatsapp.server;
+package fr.uga.im2ag.m1info.tchatsapp_alt.server;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;

@@ -7,8 +7,8 @@
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CP="$PROJECT_DIR/target/classes"
-SERVER_PKG="fr.uga.im2ag.m1info.tchatsapp.server.ChatServerMain"
-CLIENT_PKG="fr.uga.im2ag.m1info.tchatsapp.client.ChatClientMain"
+SERVER_PKG="fr.uga.im2ag.m1info.tchatsapp_alt.server.ChatServerMain"
+CLIENT_PKG="fr.uga.im2ag.m1info.tchatsapp_alt.client.ChatClientMain"
 HOST="${HOST:-localhost}"
 
 case "$1" in

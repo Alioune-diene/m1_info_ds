@@ -1,6 +1,7 @@
-package fr.uga.im2ag.m1info.tchatsapp.server;
+package fr.uga.im2ag.m1info.tchatsapp_alt.server;
 
-import fr.uga.im2ag.m1info.tchatsapp.common.*;
+import fr.uga.im2ag.m1info.tchatsapp_alt.common.IChatClient;
+import fr.uga.im2ag.m1info.tchatsapp_alt.common.IChatServer;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

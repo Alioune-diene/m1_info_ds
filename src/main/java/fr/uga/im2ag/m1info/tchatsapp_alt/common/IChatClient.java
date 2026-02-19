@@ -1,4 +1,4 @@
-package fr.uga.im2ag.m1info.tchatsapp.common;
+package fr.uga.im2ag.m1info.tchatsapp_alt.common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
