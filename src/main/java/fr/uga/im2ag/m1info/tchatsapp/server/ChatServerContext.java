@@ -4,6 +4,7 @@ import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.ProtocolMessage;
 import fr.uga.im2ag.m1info.tchatsapp.common.rmi.IChatClient;
 import fr.uga.im2ag.m1info.tchatsapp.common.repository.GroupRepository;
 import fr.uga.im2ag.m1info.tchatsapp.server.repository.ConversationServerRepository;
+import fr.uga.im2ag.m1info.tchatsapp.server.repository.ServerGroupRepository;
 import fr.uga.im2ag.m1info.tchatsapp.server.repository.UserRepository;
 
 import java.rmi.RemoteException;
@@ -15,14 +16,14 @@ public class ChatServerContext {
     private final ConversationServerRepository conversationRepository;
 
     private final UserRepository userRepository;
-    private final GroupRepository groupRepository;
+    private final ServerGroupRepository groupRepository;
     private final IdGenerator idGenerator;
 
     private final ConcurrentHashMap<Integer, IChatClient> connectedClients = new ConcurrentHashMap<>();
 
     public ChatServerContext() {
         this.userRepository = new UserRepository();
-        this.groupRepository = new GroupRepository();
+        this.groupRepository = new ServerGroupRepository();
         this.conversationRepository = new ConversationServerRepository();
         this.idGenerator = new SequentialIdGenerator();
     }
@@ -33,7 +34,7 @@ public class ChatServerContext {
         return userRepository;
     }
 
-    public GroupRepository getGroupRepository() {
+    public ServerGroupRepository getGroupRepository() {
         return groupRepository;
     }
 
