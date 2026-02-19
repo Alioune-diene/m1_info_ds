@@ -3,6 +3,7 @@ package fr.uga.im2ag.m1info.tchatsapp.server;
 import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.ProtocolMessage;
 import fr.uga.im2ag.m1info.tchatsapp.common.rmi.IChatClient;
 import fr.uga.im2ag.m1info.tchatsapp.common.repository.GroupRepository;
+import fr.uga.im2ag.m1info.tchatsapp.server.repository.ConversationServerRepository;
 import fr.uga.im2ag.m1info.tchatsapp.server.repository.UserRepository;
 
 import java.rmi.RemoteException;
@@ -11,6 +12,7 @@ import java.util.logging.Logger;
 
 public class ChatServerContext {
     private static final Logger LOG = Logger.getLogger(ChatServerContext.class.getName());
+    private final ConversationServerRepository conversationRepository;
 
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
@@ -21,6 +23,7 @@ public class ChatServerContext {
     public ChatServerContext() {
         this.userRepository = new UserRepository();
         this.groupRepository = new GroupRepository();
+        this.conversationRepository = new ConversationServerRepository();
         this.idGenerator = new SequentialIdGenerator();
     }
 
@@ -32,6 +35,20 @@ public class ChatServerContext {
 
     public GroupRepository getGroupRepository() {
         return groupRepository;
+    }
+
+    public ConversationServerRepository getConversationRepository() {
+        return conversationRepository;
+    }
+
+    public static String privateConversationId(int userId1, int userId2) {
+        int min = Math.min(userId1, userId2);
+        int max = Math.max(userId1, userId2);
+        return "private_" + min + "_" + max;
+    }
+
+    public static String groupConversationId(int groupId) {
+        return "group_" + groupId;
     }
 
     // ========================= ID Generation =========================

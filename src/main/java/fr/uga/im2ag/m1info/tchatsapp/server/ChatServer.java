@@ -1,11 +1,16 @@
 package fr.uga.im2ag.m1info.tchatsapp.server;
 
+import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
+import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.HistorySyncMessage;
+import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.MessageFactory;
 import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.ProtocolMessage;
 import fr.uga.im2ag.m1info.tchatsapp.common.model.GroupInfo;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.StoredMessage;
 import fr.uga.im2ag.m1info.tchatsapp.common.rmi.IChatClient;
 import fr.uga.im2ag.m1info.tchatsapp.common.rmi.IChatServer;
 import fr.uga.im2ag.m1info.tchatsapp.server.handlers.ServerHandlerContext;
 import fr.uga.im2ag.m1info.tchatsapp.common.model.UserInfo;
+import fr.uga.im2ag.m1info.tchatsapp.server.model.ConversationServerData;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -68,6 +73,7 @@ public class ChatServer extends UnicastRemoteObject implements IChatServer {
 
         context.registerClient(clientId, callback);
         LOG.info("Client reconnected: id=" + clientId);
+        workers.submit(() -> sendHistoryToClient(clientId));
         return true;
     }
 
@@ -126,6 +132,42 @@ public class ChatServer extends UnicastRemoteObject implements IChatServer {
 
     public ChatServerContext getContext() {
         return context;
+    }
+
+    private void sendHistoryToClient(int clientId) {
+        UserInfo user = context.getUserRepository().findById(clientId);
+        if (user == null) return;
+
+        List<StoredMessage> allMessages = new ArrayList<>();
+        Set<String> processedConvIds = new HashSet<>();
+
+        for (int contactId : user.getContacts()) {
+            String convId = ChatServerContext.privateConversationId(clientId, contactId);
+            if (processedConvIds.add(convId)) {
+                ConversationServerData conv = context.getConversationRepository().findById(convId);
+                if (conv != null) allMessages.addAll(conv.getMessages());
+            }
+        }
+
+        for (GroupInfo group : context.getGroupRepository().findAll()) {
+            if (group.hasMember(clientId)) {
+                String convId = ChatServerContext.groupConversationId(group.getGroupId());
+                if (processedConvIds.add(convId)) {
+                    ConversationServerData conv = context.getConversationRepository().findById(convId);
+                    if (conv != null) allMessages.addAll(conv.getMessages());
+                }
+            }
+        }
+
+        if (allMessages.isEmpty()) return;
+
+        allMessages.sort(Comparator.comparing(StoredMessage::getTimestamp));
+
+        HistorySyncMessage syncMsg = (HistorySyncMessage) MessageFactory.create(MessageType.HISTORY_SYNC, 0, clientId);
+        syncMsg.setMessages(allMessages);
+
+        context.sendToClient(syncMsg, clientId);
+        LOG.info("Sent history to client " + clientId + " (" + allMessages.size() + " messages)");
     }
 
     // ========================= Main =========================

@@ -17,6 +17,7 @@ public enum MessageType {
     DELETE_GROUP,
     LEAVE_GROUP,
     MESSAGE_ACK,
+    HISTORY_SYNC,
     NONE;
 
     /** Convert an integer to a MessageType enum.
@@ -31,23 +32,6 @@ public enum MessageType {
             }
         }
         return NONE;
-    }
-
-    /** Convert a byte to a MessageType enum.
-     *
-     * @param b the byte to convert
-     * @return the corresponding MessageType, or NONE if no match is found
-     */
-    public static MessageType fromByte(byte b) {
-        return fromInt(b);
-    }
-
-    /** Convert this MessageType enum to a byte.
-     *
-     * @return the byte representation of this MessageType
-     */
-    public byte toByte() {
-        return (byte) this.ordinal();
     }
 
     /** Convert this MessageType enum to a string.

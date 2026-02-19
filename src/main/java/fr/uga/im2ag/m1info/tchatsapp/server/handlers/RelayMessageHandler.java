@@ -2,6 +2,8 @@ package fr.uga.im2ag.m1info.tchatsapp.server.handlers;
 
 import fr.uga.im2ag.m1info.tchatsapp.common.MessageType;
 import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.ProtocolMessage;
+import fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.TextMessage;
+import fr.uga.im2ag.m1info.tchatsapp.common.model.StoredMessage;
 import fr.uga.im2ag.m1info.tchatsapp.server.ChatServerContext;
 import fr.uga.im2ag.m1info.tchatsapp.server.util.AckHelper;
 
@@ -28,6 +30,7 @@ public class RelayMessageHandler extends ValidatingServerMessageHandler {
 
         // Relay message to recipient
         sendPacketToRecipient(message, serverContext);
+        storeMessage(message, serverContext);
     }
 
     @Override
@@ -35,5 +38,34 @@ public class RelayMessageHandler extends ValidatingServerMessageHandler {
         return messageType == MessageType.TEXT ||
                 messageType == MessageType.MEDIA ||
                 messageType == MessageType.REACTION;
+    }
+
+    private void storeMessage(ProtocolMessage message, ChatServerContext serverContext) {
+        String content = null;
+        if (message instanceof TextMessage textMsg) {
+            content = textMsg.getContent();
+        } else if (message.getMessageType() != MessageType.TEXT) {
+            // TODO: MEDIA et REACTION non stockés pour l'instant
+            return;
+        }
+
+        String conversationId = isGroupId(message.getTo(), serverContext)
+                ? ChatServerContext.groupConversationId(message.getTo())
+                : ChatServerContext.privateConversationId(message.getFrom(), message.getTo());
+
+        String replyTo = (message instanceof TextMessage tm) ? tm.getReplyToMessageId() : null;
+
+        StoredMessage stored = new StoredMessage(
+                message.getMessageId(),
+                message.getFrom(),
+                message.getTo(),
+                content,
+                message.getMessageType(),
+                message.getTimestamp(),
+                replyTo,
+                conversationId
+        );
+
+        serverContext.getConversationRepository().addMessage(conversationId, stored);
     }
 }

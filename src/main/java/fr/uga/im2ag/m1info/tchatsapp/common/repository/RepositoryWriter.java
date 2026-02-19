@@ -19,17 +19,17 @@ public class RepositoryWriter<T> {
     private final String filePath;
 
     public RepositoryWriter(String filePath) {
-        Path folder = null;
-        String fp = System.getProperty("user.dir");
+        String baseDir = System.getProperty(
+                "tchatsapp.data.dir",
+                System.getProperty("user.dir") + File.separator + "tchatsapp-data"
+        );
         try {
-            folder = Files.createTempDirectory("tchatsapp");
-            fp = folder.toAbsolutePath().toString();
+            Files.createDirectories(Path.of(baseDir));
         } catch (IOException e) {
-            LOG.severe("Failed to create temporary directory: " + e.getMessage());
-        } finally {
-            this.filePath = fp + File.separator + filePath + ".dat";
-            LOG.info("RepositoryWriter initialized with file path: " + this.filePath);
+            LOG.severe("Failed to create data directory: " + e.getMessage());
         }
+        this.filePath = baseDir + File.separator + filePath + ".dat";
+        LOG.info("RepositoryWriter initialized with file path: " + this.filePath);
     }
 
     public void writeData(Set<T> dataSet) {
