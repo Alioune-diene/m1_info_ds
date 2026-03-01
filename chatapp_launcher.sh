@@ -24,8 +24,9 @@ case "$1" in
     ;;
 
   server)
-    echo "==> Starting ChatServer (registry created on port 1099)..."
-    java -Djava.rmi.server.hostname=localhost -cp "$CP" "$SERVER_PKG"
+    SERVER_IP="${SERVER_IP:-$(hostname -I | awk '{print $1}')}"
+    echo "==> Starting ChatServer on $SERVER_IP (registry on port 1099)..."
+    java -Djava.rmi.server.hostname="$SERVER_IP" -cp "$CP" "$SERVER_PKG"
     ;;
 
   client)
