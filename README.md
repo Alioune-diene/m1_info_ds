@@ -1,42 +1,53 @@
-# Introduction to Distributed Systems - Lab 2: Java RMI
+# Introduction to Distributed Systems
 
-M1 Informatique - Universite Grenoble Alpes
+M1 Informatique - Université Grenoble Alpes
 
 ## Repository Structure
 
 ```
 src/main/java/fr/uga/im2ag/m1info/
-├── lab2/
-│   ├── hello/       # Exercise 4 - HelloWorld RMI example
-│   ├── hello1/      # Exercise 4 - Variant
-│   ├── hello2/      # Exercise 5 - Modify Hello (client identity)
-│   └── hello3/      # Exercise 6 - Continue Hello (accounting, registry)
+├── lab1/                          # Lab 1 - Java Sockets
+│   ├── echo/                      # Echo server/client
+│   ├── chat/                      # Basic chat with sockets
+│   ├── calculator/                # RPC-style calculator
+│   └── phoneRegistry/             # Phone registry server
 │
-└── tchatsapp/       # Exercise 7 - The Chat Application
-    ├── common/      # Shared RMI interfaces and legacy protocol classes
-    │   ├── IChatServer.java      # Server remote interface
-    │   ├── IChatClient.java      # Client callback remote interface
-    │   ├── messagefactory/       # (legacy) Protocol messages from COO project
-    │   ├── repository/           # (legacy) Generic CRUD repository pattern
-    │   └── model/                # (legacy) GroupInfo model
-    ├── server/
-    │   ├── ChatServerMain.java   # Server entry point (creates registry + binds)
-    │   └── ChatServerImpl.java   # Server implementation (broadcast, history, persistence)
-    ├── client/
-    │   ├── ChatClientMain.java   # Client entry point (stdin loop)
-    │   └── ChatClientImpl.java   # Client callback implementation (prints messages)
-    ├── crypto/      # (legacy) E2E encryption from COO project
-    └── storage/     # (legacy) Encrypted key storage from COO project
+├── lab2/                          # Lab 2 - Java RMI (exercises 4-6)
+│   ├── hello/                     # Exercise 4 - HelloWorld RMI
+│   ├── hello1/                    # Exercise 4 - Variant
+│   ├── hello2/                    # Exercise 5 - Client identity (callback intro)
+│   └── hello3/                    # Exercise 6 - Accounting & multiple services
+│
+├── tchatsapp_alt/                 # Lab 2 - Exercise 7: Chat App (our implementation)
+│   ├── common/
+│   │   ├── IChatServer.java       # Server remote interface
+│   │   └── IChatClient.java       # Client callback remote interface
+│   ├── server/
+│   │   ├── ChatServerMain.java    # Entry point (creates registry + binds)
+│   │   └── ChatServerImpl.java    # Broadcast, history, persistence
+│   └── client/
+│       ├── ChatClientMain.java    # Entry point (stdin loop)
+│       └── ChatClientImpl.java    # RMI callback (prints messages)
+│
+├── tchatsapp/                     # Lab 2 - Exercise 7: Chat App (implementation from semester 1)
+│   │                              # Full-featured port of the COO project to RMI
+│   ├── common/rmi/                # RMI interfaces (ProtocolMessage-based)
+│   ├── server/                    # Server with handler chain, routing, user management
+│   ├── client/                    # Client with event bus, command pattern, media
+│   └── gui/                       # JavaFX GUI
+│
+└── rabbbitmq/                     # Lab 3 - RabbitMQ (Python)
+    ├── docker-compose.yaml        # RabbitMQ broker via Docker
+    ├── hello_world/               # Exercise: basic send/receive
+    ├── work_queues/               # Exercise: task queues (new_task / worker)
+    └── publish_subscrive/         # Exercise: pub/sub (emit_log / rec_logs)
 ```
 
-The `common/`, `crypto/`, and `storage/` packages were imported from a previous
-COO semester project (TchatsApp - a full chat application with NIO sockets and E2E
-encryption). For this RMI lab, only the core RMI classes are used; the legacy
-packages are kept for reference.
+---
 
-## Exercise 7 - The Chat Application
+## Lab 2 - Exercise 7: Chat Application (`tchatsapp_alt`)
 
-An RMI-based chat system implemented in four stages:
+An RMI-based chat system built from scratch, implemented in three stages.
 
 ### Stage a) Basic chat
 Participants can dynamically join, leave, and exchange messages.
@@ -50,57 +61,104 @@ history with the `/history` command.
 Message history is serialized to `chat_history.dat`. If the server restarts,
 previous messages are restored.
 
-## How to Test the Chat Application
-
 ### Prerequisites
 - Java 21
 - Maven
 
-### Build
+### Build & Run
 
 ```bash
+# Compile
 ./chatapp_launcher.sh compile
-```
 
-### Run
-
-Open 3 terminals:
-
-**Terminal 1 - Start the server:**
-```bash
+# Terminal 1 - Start the server
 ./chatapp_launcher.sh server
-```
 
-**Terminal 2 - Join as Alice:**
-```bash
+# Terminal 2 - Join as Alice
 ./chatapp_launcher.sh client Alice
+
+# Terminal 3 - Join as Bob
+./chatapp_launcher.sh client Bob
 ```
 
-**Terminal 3 - Join as Bob:**
+### Cross-network testing (different machines on same LAN)
+
 ```bash
-./chatapp_launcher.sh client Bob
+# On the server machine (IP is printed on startup)
+./chatapp_launcher.sh server
+# => Starting ChatServer on 192.168.x.x ...
+
+# On the client machine
+HOST=192.168.x.x ./chatapp_launcher.sh client Alice
+
+# Override server IP manually if needed
+SERVER_IP=192.168.x.x ./chatapp_launcher.sh server
 ```
 
 ### Client Commands
 
-| Command     | Description                           |
-|-------------|---------------------------------------|
-| *(text)*    | Send a message to all participants    |
-| `/history`  | Display all past messages             |
-| `/quit`     | Leave the chat cleanly                |
+| Command      | Description                        |
+|--------------|------------------------------------|
+| *(any text)* | Send a message to all participants |
+| `/history`   | Display all past messages          |
+| `/quit`      | Leave the chat cleanly             |
 
 ### Testing Persistence (Stage c)
 
 1. Start the server and send some messages
 2. Stop the server with `Ctrl+C`
-3. Restart the server: `./chatapp_launcher.sh server`
-4. Connect a client and type `/history` to see the recovered messages
+3. Restart: `./chatapp_launcher.sh server`
+4. Connect a client and type `/history` — previous messages are restored
 
-### Architecture
+---
 
-The chat uses the **RMI callback pattern**:
-- `IChatServer` is registered in the RMI registry by the server
-- Clients look up `IChatServer` and call `join(username, clientRef)`
-- The client passes itself (`IChatClient`) as a remote object
-- The server calls `receiveMessage()` on each client to broadcast messages
-- No separate `rmiregistry` process needed (created in `ChatServerMain`)
+## Lab 3 - RabbitMQ (`rabbbitmq`)
+
+RabbitMQ exercises implemented in Python. A Docker Compose file is provided
+to run the broker without a local installation.
+
+### Start the broker
+
+```bash
+cd src/main/java/fr/uga/im2ag/m1info/rabbbitmq
+docker compose up -d
+```
+
+Broker runs on `localhost:5672` (AMQP) and `localhost:15672` (management UI).
+Credentials: `admin` / `admin`.
+
+### hello_world
+
+```bash
+# Receiver (start first)
+python3 hello_world/recv.py
+
+# Sender
+python3 hello_world/send.py
+```
+
+### work_queues
+
+```bash
+# Start one or more workers
+python3 work_queues/worker.py
+
+# Send tasks
+python3 work_queues/new_task.py "task message"
+```
+
+### publish_subscribe
+
+```bash
+# Start one or more subscribers
+python3 publish_subscrive/rec_logs.py
+
+# Publish a log
+python3 publish_subscrive/emit_log.py "log message"
+```
+
+### Stop the broker
+
+```bash
+docker compose down
+```
