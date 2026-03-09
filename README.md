@@ -131,31 +131,57 @@ Credentials: `admin` / `admin`.
 
 ```bash
 # Receiver (start first)
-python3 hello_world/recv.py
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.hello_world.Recv 
 
 # Sender
-python3 hello_world/send.py
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.hello_world.Send
 ```
 
 ### work_queues
 
 ```bash
 # Start one or more workers
-python3 work_queues/worker.py
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.work_queues.Worker 
 
 # Send tasks
-python3 work_queues/new_task.py "task message"
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.work_queues.NewTask -Dexec.args="Hello..."
 ```
+
+Note:  The amount of dots " . " represent the amount of seconds for the worker.
 
 ### publish_subscribe
 
 ```bash
 # Start one or more subscribers
-python3 publish_subscrive/rec_logs.py
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.publish_subscribe.RecLogs 
 
 # Publish a log
-python3 publish_subscrive/emit_log.py "log message"
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.publish_subscribe.EmitLog 
 ```
+
+
+### ping_pong
+
+```bash
+# Start node 1
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.ping_pong.Node1
+
+# Start ndoe 2 
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.ping_pong.Node2
+
+```
+
+#### Note:
+The ping-pong algorith we did follow the 3 core rules from the lecture.
+
+Does it avoid the lecture's issues ?
+YES but, by simplification not by solving them.
+* Issue 1 (slide 18): Pushing the button more than once creates multiple parallel ping-pong streams.
+
+Our Node1 has no interactive button, it pushes exactly once at startup. Problem sidestepped.
+* Issue 2 (slide 20): Both nodes pushing simultaneously creates two crossing streams.
+
+Our Node2 has no PUSH button at all it's a pure reactor.
 
 ### Stop the broker
 
