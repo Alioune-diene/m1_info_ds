@@ -1,3 +1,4 @@
+package fr.uga.im2ag.m1info.rabbbitmq.work_queues;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

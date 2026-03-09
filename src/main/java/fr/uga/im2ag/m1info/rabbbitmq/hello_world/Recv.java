@@ -1,3 +1,5 @@
+package fr.uga.im2ag.m1info.rabbbitmq.hello_world;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
