@@ -4,48 +4,93 @@ M1 Informatique - Université Grenoble Alpes
 
 ## Repository Structure
 
-```
-src/main/java/fr/uga/im2ag/m1info/
-├── lab1/                          # Lab 1 - Java Sockets
-│   ├── echo/                      # Echo server/client
-│   ├── chat/                      # Basic chat with sockets
-│   ├── calculator/                # RPC-style calculator
-│   └── phoneRegistry/             # Phone registry server
-│
-├── lab2/                          # Lab 2 - Java RMI (exercises 4-6)
-│   ├── hello/                     # Exercise 4 - HelloWorld RMI
-│   ├── hello1/                    # Exercise 4 - Variant
-│   ├── hello2/                    # Exercise 5 - Client identity (callback intro)
-│   └── hello3/                    # Exercise 6 - Accounting & multiple services
-│
-├── tchatsapp_alt/                 # Lab 2 - Exercise 7: Chat App (our implementation)
-│   ├── common/
-│   │   ├── IChatServer.java       # Server remote interface
-│   │   └── IChatClient.java       # Client callback remote interface
-│   ├── server/
-│   │   ├── ChatServerMain.java    # Entry point (creates registry + binds)
-│   │   └── ChatServerImpl.java    # Broadcast, history, persistence
-│   └── client/
-│       ├── ChatClientMain.java    # Entry point (stdin loop)
-│       └── ChatClientImpl.java    # RMI callback (prints messages)
-│
-├── tchatsapp/                     # Lab 2 - Exercise 7: Chat App (implementation from semester 1)
-│   │                              # Full-featured port of the COO project to RMI
-│   ├── common/rmi/                # RMI interfaces (ProtocolMessage-based)
-│   ├── server/                    # Server with handler chain, routing, user management
-│   ├── client/                    # Client with event bus, command pattern, media
-│   └── gui/                       # JavaFX GUI
-│
-└── rabbbitmq/                     # Lab 3 - RabbitMQ (Python)
-    ├── docker-compose.yaml        # RabbitMQ broker via Docker
-    ├── hello_world/               # Exercise: basic send/receive
-    ├── work_queues/               # Exercise: task queues (new_task / worker)
-    └── publish_subscrive/         # Exercise: pub/sub (emit_log / rec_logs)
+```bash
+.
+├── lab1
+│   └── src/main/java/fr/uga/im2ag/m1info/
+│       ├── calculator
+│       ├── chat
+│       ├── echo
+│       └── phoneRegistry
+├── lab2
+│   ├── lab2-hello.sh
+│   └── src/main/java/fr/uga/im2ag/m1info/
+│       ├── hello
+│       ├── hello1
+│       ├── hello2
+│       └── hello3
+├── rabbitmq
+│   └── src/main/java/fr/uga/im2ag/m1info/
+│       ├── hello_world
+│       ├── ping_pong
+│       ├── publish_subscrive
+│       └── work_queues
+├── tchatsapp
+│   └── src/main/java/fr/uga/im2ag/m1info/
+│       ├── client
+│       ├── common
+│       └── server
+└── tchatsapp_alt
+    ├── chatapp_launcher.sh
+    └── src/main/java/fr/uga/im2ag/m1info/
+        ├── client
+        ├── common
+        └── server
 ```
 
 ---
 
-## Lab 2 - Exercise 7: Chat Application (`tchatsapp_alt`)
+## Lab 1
+
+```bash
+cd lab1
+```
+
+### Echo
+
+```bash
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.echo.EchoServer -Dexec.args="<port number>"
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.echo.EchoClient -Dexec.args="<host name> <port number>"
+```
+
+### Calculator
+
+```bash
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.calculator.ServerCalculator -Dexec.args="<port number>"
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.calculator.ClientCalculator -Dexec.args="<host name> <port number>"
+```
+
+### Phone Registry
+
+```bash
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.phoneRegistry.Server -Dexec.args="<port number>"
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.phoneRegistry.Client -Dexec.args="<host name> <port number>"
+```
+
+### Chat
+
+```bash
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.chat.ChatServer -Dexec.args="<port number>"
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.chat.ChatClient -Dexec.args="<host name> <port number>"
+```
+
+---
+
+## Lab 2
+
+```bash
+cd lab2
+```
+
+Read instructions in the readme files of each subdirectory.
+
+---
+
+## Chat Application (`tchatsapp_alt`)
+
+```bash
+cd tchatsapp_alt
+```
 
 An RMI-based chat system built from scratch, implemented in three stages.
 
@@ -112,7 +157,11 @@ SERVER_IP=192.168.x.x ./chatapp_launcher.sh server
 
 ---
 
-## Lab 3 - RabbitMQ (`rabbbitmq`)
+## Lab 3 - RabbitMQ (`rabbitmq`)
+
+```bash
+cd rabbitmq
+```
 
 RabbitMQ exercises implemented in Python. A Docker Compose file is provided
 to run the broker without a local installation.
@@ -120,7 +169,6 @@ to run the broker without a local installation.
 ### Start the broker
 
 ```bash
-cd src/main/java/fr/uga/im2ag/m1info/rabbbitmq
 docker compose up -d
 ```
 
@@ -131,20 +179,20 @@ Credentials: `admin` / `admin`.
 
 ```bash
 # Receiver (start first)
-mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.hello_world.Recv 
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.hello_world.Recv 
 
 # Sender
-mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.hello_world.Send
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.hello_world.Send
 ```
 
 ### work_queues
 
 ```bash
 # Start one or more workers
-mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.work_queues.Worker 
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.work_queues.Worker 
 
 # Send tasks
-mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.work_queues.NewTask -Dexec.args="Hello..."
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.work_queues.NewTask -Dexec.args="Hello..."
 ```
 
 Note:  The amount of dots " . " represent the amount of seconds for the worker.
@@ -153,21 +201,20 @@ Note:  The amount of dots " . " represent the amount of seconds for the worker.
 
 ```bash
 # Start one or more subscribers
-mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.publish_subscribe.RecLogs 
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.publish_subscribe.RecLogs 
 
 # Publish a log
-mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.publish_subscribe.EmitLog 
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.publish_subscribe.EmitLog 
 ```
-
 
 ### ping_pong
 
 ```bash
 # Start node 1
-mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.ping_pong.Node1
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.ping_pong.Node1
 
 # Start ndoe 2 
-mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.rabbbitmq.ping_pong.Node2
+mvn exec:java -Dexec.mainClass=fr.uga.im2ag.m1info.ping_pong.Node2
 
 ```
 

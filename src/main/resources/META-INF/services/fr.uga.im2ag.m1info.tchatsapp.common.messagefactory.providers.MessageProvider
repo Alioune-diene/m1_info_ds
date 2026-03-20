@@ -1,7 +1,0 @@
-fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.providers.AckMessageProvider
-fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.providers.ContactRequestMessageProvider
-fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.providers.HistorySyncMessageProvider
-fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.providers.ManagementMessageProvider
-fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.providers.MediaMessageProvider
-fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.providers.TextMessageProvider
-fr.uga.im2ag.m1info.tchatsapp.common.messagefactory.providers.ReactionMessageProvider

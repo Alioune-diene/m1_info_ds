@@ -1,0 +1,7 @@
+fr.uga.im2ag.m1info.common.messagefactory.providers.AckMessageProvider
+fr.uga.im2ag.m1info.common.messagefactory.providers.ContactRequestMessageProvider
+fr.uga.im2ag.m1info.common.messagefactory.providers.HistorySyncMessageProvider
+fr.uga.im2ag.m1info.common.messagefactory.providers.ManagementMessageProvider
+fr.uga.im2ag.m1info.common.messagefactory.providers.MediaMessageProvider
+fr.uga.im2ag.m1info.common.messagefactory.providers.TextMessageProvider
+fr.uga.im2ag.m1info.common.messagefactory.providers.ReactionMessageProvider
