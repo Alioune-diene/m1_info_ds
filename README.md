@@ -1,3 +1,6 @@
+![CI](https://github.com/Alioune-diene/m1_info_ds/actions/workflows/ci.yml/badge.svg)
+
+
 # Introduction to Distributed Systems
 
 M1 Informatique - Université Grenoble Alpes
