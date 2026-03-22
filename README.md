@@ -1,5 +1,5 @@
 ![CI](https://github.com/Alioune-diene/m1_info_ds/actions/workflows/ci.yml/badge.svg)
-
+[![Java Version](https://img.shields.io/badge/Java-21-blue)](https://docs.oracle.com/en/java/javase/21/) 
 
 # Introduction to Distributed Systems
 
