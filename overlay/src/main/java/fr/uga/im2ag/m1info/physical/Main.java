@@ -68,7 +68,10 @@ public class Main {
                 String line = scanner.nextLine().trim();
 
                 switch (line) {
-                    case "quit" -> { return; }
+                    case "quit" -> {
+                        node.close();
+                        return;
+                    }
                     case "status" -> System.out.println("[Node " + nodeId + "] " + manager.getStatusSummary());
                     default -> {
                         if (line.startsWith("send ")) {
@@ -79,9 +82,9 @@ public class Main {
                     }
                 }
             }
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Error while reading user input on node " + nodeId, e);
         }
-
-        node.close();
     }
 
     private static void handleSendCommand(String line, int nodeId, SpanningTreeManager manager) {

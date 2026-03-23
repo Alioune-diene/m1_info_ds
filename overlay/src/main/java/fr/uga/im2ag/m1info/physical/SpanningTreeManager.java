@@ -9,6 +9,7 @@ public class SpanningTreeManager {
     private static final Logger LOG = Logger.getLogger(SpanningTreeManager.class.getName());
 
     private static final long ELECTION_TIMEOUT_MS = 3_000;
+    private static final long BUILDING_TIMEOUT_MS = 5_000;
     private static final long HB_INTERVAL_MS = 2_000;
     private static final long HB_TIMEOUT_MS = 6_000;
     private static final int DEDUP_CACHE_SIZE = 1_000;
@@ -36,6 +37,7 @@ public class SpanningTreeManager {
     private int pendingAcks = 0;
 
     private ScheduledFuture<?> electionFinalizer;
+    private ScheduledFuture<?> buildingFinalizer;
 
     private final Map<Integer, Long> lastHeartbeatReceived = new ConcurrentHashMap<>();
     private ScheduledFuture<?> hbSender;
@@ -74,9 +76,10 @@ public class SpanningTreeManager {
             parentId = -1;
             children.clear();
             pendingAcks = 0;
+            if (buildingFinalizer != null) { buildingFinalizer.cancel(false); buildingFinalizer = null; }
         }
 
-        LOG.info(() -> String.format("[%d] Election started", nodeId));
+        LOG.info(() -> String.format("[%d] Election started (v%d)", nodeId, version));
         transport.broadcast(Envelope.election(nodeId, nodeId, version));
         scheduleElectionFinalizer(version);
     }
@@ -85,6 +88,23 @@ public class SpanningTreeManager {
         synchronized (stateLock) {
             if (electionFinalizer != null) electionFinalizer.cancel(false);
             electionFinalizer = scheduler.schedule(() -> finalizeElection(version), ELECTION_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+        }
+    }
+
+    private void scheduleBuildingFinalizer(int version) {
+        synchronized (stateLock) {
+            if (buildingFinalizer != null) buildingFinalizer.cancel(false);
+            buildingFinalizer = scheduler.schedule(() -> forceBuildingComplete(version), BUILDING_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+        }
+    }
+
+    private void forceBuildingComplete(int version) {
+        synchronized (stateLock) {
+            if (version != treeVersion || phase != Phase.BUILDING) return;
+            if (pendingAcks > 0) {
+                LOG.warning(() -> String.format("[%d] Building timeout v%d — %d silent neighbors ignored, passing to READY phase", nodeId, version, pendingAcks));
+            }
+            transitionToReady(version);
         }
     }
 
@@ -97,10 +117,11 @@ public class SpanningTreeManager {
         }
 
         if (root == nodeId) {
-            LOG.info(() -> String.format("[%d] Elected as root", nodeId));
+            LOG.info(() -> String.format("[%d] Elected as root (v%d)", nodeId, root));
             buildTreeAsRoot(version);
         } else {
-            LOG.info(() -> String.format("[%d] Waiting for TREE_DISCOVER from root %d (election v%d)", nodeId, root, version));
+            LOG.info(() -> String.format("[%d] Waiting for TREE_DISCOVER from root %d (v%d)", nodeId, root, version));
+            scheduleBuildingFinalizer(version);
         }
     }
 
@@ -115,6 +136,8 @@ public class SpanningTreeManager {
             synchronized (stateLock) { transitionToReady(version); }
             return;
         }
+
+        scheduleBuildingFinalizer(version);
 
         Envelope discover = Envelope.treeDiscover(nodeId, nodeId, version, 0);
         for (int n : neighbors) trySend(n, discover);
@@ -135,7 +158,8 @@ public class SpanningTreeManager {
 
     private void onElection(Envelope env, int from) {
         int candidate = env.getRootCandidateId();
-        int version   = env.getTreeVersion();
+        int version = env.getTreeVersion();
+        boolean triggerRebuildNeeded = false;
 
         synchronized (stateLock) {
             if (version < treeVersion) { return; }
@@ -148,9 +172,15 @@ public class SpanningTreeManager {
                 scheduleElectionFinalizer(version);
             }
 
-            if (candidate >= bestRootId) { return; }
-            bestRootId = candidate;
+            if (phase != Phase.ELECTING) {
+                triggerRebuildNeeded = true;
+            } else {
+                if (candidate >= bestRootId) { return; }
+                bestRootId = candidate;
+            }
         }
+
+        if (triggerRebuildNeeded) { triggerRebuild(); return; }
 
         Envelope forward = Envelope.election(nodeId, candidate, version);
         for (int n : neighbors) { if (n != from) { trySend(n, forward); } }
@@ -160,7 +190,7 @@ public class SpanningTreeManager {
 
     private void onTreeDiscover(Envelope env, int from) {
         int version = env.getTreeVersion();
-        int root    = env.getRootCandidateId();
+        int root = env.getRootCandidateId();
 
         synchronized (stateLock) {
             if (version < treeVersion) {
@@ -193,6 +223,7 @@ public class SpanningTreeManager {
         }
 
         trySend(from, Envelope.treeParentAck(nodeId, version));
+        scheduleBuildingFinalizer(version);
 
         Envelope discover = Envelope.treeDiscover(nodeId, root, version, env.getLevel() + 1);
         for (int n : neighbors) { if (n != from) { trySend(n, discover); } }
@@ -220,6 +251,7 @@ public class SpanningTreeManager {
     private void transitionToReady(int version) {
         if (phase == Phase.READY) { return; }
         phase = Phase.READY;
+        if (buildingFinalizer != null) { buildingFinalizer.cancel(false); buildingFinalizer = null; }
 
         int parentSnap = parentId;
         Set<Integer> childrenSnap = Set.copyOf(children);
@@ -227,7 +259,7 @@ public class SpanningTreeManager {
 
         scheduler.execute(() -> {
             LOG.info(() -> String.format(
-                    "[%d] READY v%d | parent=%s | enfants=%s",
+                    "[%d] READY v%d | parent=%s | childs=%s",
                     nodeId, versionSnap,
                     parentSnap == -1 ? "ROOT" : String.valueOf(parentSnap),
                     childrenSnap));
