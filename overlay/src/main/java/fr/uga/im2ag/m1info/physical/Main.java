@@ -40,12 +40,15 @@ public class Main {
             return;
         }
 
-        Runtime.getRuntime().addShutdownHook(new Thread(node::close));
+        SpanningTreeManager manager = new SpanningTreeManager(nodeId, neighbors, node);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("\nShutting down node " + nodeId + "...");
+            node.close();
+        }));
 
         try {
-            node.startListening(msg ->
-                    System.out.printf("[Node %d] <- received from %d : '%s'%n", nodeId, msg.getSourceId(), msg.getPayload())
-            );
+            node.startListening(manager::handleEnvelope);
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error while starting node " + nodeId, e);
             node.close();
@@ -53,38 +56,50 @@ public class Main {
             return;
         }
 
+        manager.start(msg -> System.out.printf("%n[Node %d] Received message from %d: \"%s\"%n> ", nodeId, msg.getSourceId(), msg.getPayload()));
+
         System.out.printf("=== Physical node %d started. Neighbors: %s ===%n", nodeId, neighbors);
-        System.out.println("Commandes : 'send <dst> <message>'  |  'quit'");
+        System.out.println("Commandes : 'send <dst> <message>'  |  'status'  |  'quit'");
 
         try (Scanner scanner = new Scanner(System.in)) {
-            while (scanner.hasNextLine()) {
+            while (true) {
+                System.out.print("> ");
+                if (!scanner.hasNextLine()) { break; }
                 String line = scanner.nextLine().trim();
 
-                if (line.equals("quit")) { break; }
-
-                if (line.startsWith("send ")) {
-                    String[] parts = line.split(" ", 3);
-                    if (parts.length < 3) {
-                        System.err.println("Usage : send <dstId> <message>");
-                        continue;
+                switch (line) {
+                    case "quit" -> { return; }
+                    case "status" -> System.out.println("[Node " + nodeId + "] " + manager.getStatusSummary());
+                    default -> {
+                        if (line.startsWith("send ")) {
+                            handleSendCommand(line, nodeId, manager);
+                        } else if (!line.isEmpty()) {
+                            System.err.println("Unknown command. Available commands: 'send <dst> <message>', 'status', 'quit'");
+                        }
                     }
-                    try {
-                        int dst = Integer.parseInt(parts[1]);
-                        String payload = parts[2];
-                        node.send(dst, payload);
-                        System.out.printf("[Node %d] -> send to %d : '%s'%n", nodeId, dst, payload);
-                    } catch (NumberFormatException e) {
-                        System.err.println("dstId must be an integer");
-                    } catch (Exception e) {
-                        LOG.log(Level.WARNING, "An error occurred while trying to send message to node " + nodeId, e);
-                    }
-                } else if (!line.isEmpty()) {
-                    System.err.println("Unknown command: " + line);
                 }
             }
         }
 
         node.close();
-        System.out.println("Node " + nodeId + " stopped.");
+    }
+
+    private static void handleSendCommand(String line, int nodeId, SpanningTreeManager manager) {
+        String[] parts = line.split(" ", 3);
+        if (parts.length < 3) { System.err.println("Usage : send <dstId> <message>"); return; }
+        try {
+            int dst = Integer.parseInt(parts[1]);
+            String payload = parts[2];
+
+            SpanningTreeManager.Phase phase = manager.getPhase();
+            if (phase != SpanningTreeManager.Phase.READY) {
+                System.out.printf("[Node %d] Warning: Spanning tree is not ready (%s), message may not be delivered.%n", nodeId, phase);
+            }
+
+            manager.sendData(dst, payload);
+            System.out.printf("[Node %d] -> send to %d : '%s'%n", nodeId, dst, payload);
+        } catch (NumberFormatException e) {
+            System.err.println("dstId must be an integer");
+        }
     }
 }

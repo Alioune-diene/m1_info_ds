@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
+import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,8 +24,6 @@ public class PhysicalNode implements AutoCloseable {
     private final Gson gson = new Gson();
     private final Connection connection;
     private final Channel channel;
-
-    private volatile MessageHandler handler;
 
     public PhysicalNode(int id, List<Integer> neighbors, String rabbitHost) throws IOException, TimeoutException {
         this.id = id;
@@ -41,69 +40,36 @@ public class PhysicalNode implements AutoCloseable {
         LOG.info(() -> "Node " + id + " ready - neighbors : " + neighbors + " - queue : " + myQueue());
     }
 
-    public void startListening(MessageHandler handler) throws IOException {
-        this.handler = handler;
-
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+    public void startListening(BiConsumer<Envelope, Integer> callback) throws IOException {
+        DeliverCallback deliverCallback = (tag, delivery) -> {
             String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
-            Message msg = gson.fromJson(json, Message.class);
-            handleIncoming(msg);
+            Envelope env = gson.fromJson(json, Envelope.class);
+            callback.accept(env, env.getSenderId());
         };
-
         channel.basicConsume(myQueue(), true, deliverCallback, tag -> {});
         LOG.info(() -> "Node " + id + " started listening on queue " + myQueue());
     }
 
-    public void send(int destinationId, String payload) throws IOException {
-        Message msg = new Message(id, destinationId, payload);
-        flood(msg);
+    public void sendToNeighbor(int neighborId, Envelope env) throws IOException {
+        if (!neighbors.contains(neighborId)) { throw new IllegalArgumentException(neighborId + " is not a neighbor of " + id); }
+        String json = gson.toJson(env);
+        channel.basicPublish("", QUEUE_PREFIX + neighborId, null, json.getBytes(StandardCharsets.UTF_8));
+        LOG.fine(() -> String.format("  %d -> %d | %s", id, neighborId, env));
     }
 
-    public void sendToNeighbor(int neighborId, Message msg) throws IOException {
-        if (!neighbors.contains(neighborId)) {
-            throw new IllegalArgumentException("Node " + neighborId + " is not a neighbor of node " + id);
+    public void broadcast(Envelope env) {
+        for (int n : neighbors) {
+            try {
+                sendToNeighbor(n, env);
+            } catch (IOException ex) {
+                LOG.log(Level.WARNING, String.format("Node %d failed to send message to neighbor %d", id, n), ex);
+            }
         }
-
-        String json = gson.toJson(msg);
-        channel.basicPublish(
-                "",
-                QUEUE_PREFIX + neighborId,
-                null,
-                json.getBytes(StandardCharsets.UTF_8)
-        );
-        LOG.fine(() -> "Node " + id + " sent message to neighbor " + neighborId + " | dst=" + msg.getDestinationId());
     }
 
     public int getId() { return id; }
 
     public List<Integer> getNeighbors() { return neighbors; }
-
-    private void handleIncoming(Message msg) {
-        if (msg.getDestinationId() == id) {
-            LOG.info(() -> "Node "  + id + " received message from " + msg.getSourceId() + " | payload='" + msg.getPayload() + "'");
-            if (handler != null) { handler.onMessage(msg); }
-        } else if (!msg.hasVisited(id)) {
-            LOG.info(() -> "Node " + id + " relays message from " + msg.getSourceId() + " to dst=" + msg.getDestinationId());
-            try { flood(msg); }
-            catch (IOException e) { LOG.log(Level.WARNING, "Nœud " + id + " : erreur de relais", e); }
-        } else {
-            LOG.info(() -> "Node " + id + " ignored already visited message from " + msg.getSourceId() + " | dst=" + msg.getDestinationId());
-        }
-    }
-
-    private void flood(Message msg) throws IOException {
-        msg.markVisited(id);
-
-        for (int neighbor : neighbors) {
-            if (!msg.hasVisited(neighbor)) {
-                sendToNeighbor(neighbor, msg);
-            }
-        }
-    }
-
-    private String myQueue() {
-        return QUEUE_PREFIX + id;
-    }
 
     @Override
     public void close() {
@@ -115,4 +81,6 @@ public class PhysicalNode implements AutoCloseable {
             LOG.log(Level.WARNING, "Node " + id + " : error during close", e);
         }
     }
+
+    private String myQueue() { return QUEUE_PREFIX + id; }
 }
