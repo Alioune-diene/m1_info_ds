@@ -274,4 +274,72 @@ class SpanningTreeManagerUnitTest {
         verify(handler, times(1)).onMessage(any());
     }
 
+    // -------------------------------------------------------------------------
+    // HEARTBEAT / HEARTBEAT_ACK handling
+    // -------------------------------------------------------------------------
+
+    @Test
+    void onHeartbeat_shouldSendHeartbeatAckToSender() throws IOException {
+        SpanningTreeManager stm = new SpanningTreeManager(4, List.of(2), transport);
+
+        stm.handleEnvelope(Envelope.heartbeat(2, 0), 2);
+
+        ArgumentCaptor<Envelope> captor = ArgumentCaptor.forClass(Envelope.class);
+        verify(transport, atLeastOnce()).sendToNeighbor(eq(2), captor.capture());
+
+        boolean ackSent = captor.getAllValues().stream()
+                .anyMatch(e -> e.getType() == Envelope.Type.HEARTBEAT_ACK);
+        assertTrue(ackSent, "A HEARTBEAT must elicit a HEARTBEAT_ACK reply to the sender");
+    }
+
+    // -------------------------------------------------------------------------
+    // TOPOLOGY_REBUILD handling
+    // -------------------------------------------------------------------------
+
+    @Test
+    void onTopologyRebuild_shouldBroadcastRebuildMessageToAllNeighbors() throws IOException {
+        SpanningTreeManager stm = new SpanningTreeManager(3, List.of(0, 1, 4), transport);
+
+        Envelope rebuild = Envelope.rebuild(0, 5);
+        stm.handleEnvelope(rebuild, 0);
+
+        // The manager must propagate the TOPOLOGY_REBUILD to all neighbors.
+        verify(transport, atLeastOnce()).broadcast(argThat(
+                e -> e.getType() == Envelope.Type.TOPOLOGY_REBUILD && e.getTreeVersion() == 5));
+    }
+
+    @Test
+    void onTopologyRebuild_shouldIgnoreOlderOrEqualVersion() throws IOException {
+        SpanningTreeManager stm = new SpanningTreeManager(3, List.of(0), transport);
+        // Deliver a higher-version message first to bump the stored treeVersion.
+        stm.handleEnvelope(Envelope.rebuild(0, 10), 0);
+        reset(transport);
+
+        // A rebuild with an older version should be silently dropped.
+        stm.handleEnvelope(Envelope.rebuild(0, 5), 0);
+
+        verify(transport, never()).broadcast(argThat(e -> e.getTreeVersion() == 5));
+    }
+
+    // -------------------------------------------------------------------------
+    // getStatusSummary
+    // -------------------------------------------------------------------------
+
+    @Test
+    void getStatusSummary_shouldReturnNonEmptyString() {
+        SpanningTreeManager stm = new SpanningTreeManager(1, List.of(0), transport);
+        String summary = stm.getStatusSummary();
+
+        assertNotNull(summary);
+        assertFalse(summary.isBlank(), "Status summary must be a non-empty, non-blank string");
+    }
+
+    @Test
+    void getStatusSummary_shouldContainPhaseAndVersion() {
+        SpanningTreeManager stm = new SpanningTreeManager(1, List.of(0), transport);
+        String summary = stm.getStatusSummary();
+
+        assertTrue(summary.contains("ELECTING"), "Summary must mention current phase");
+        assertTrue(summary.contains("v="), "Summary must mention tree version");
+    }
 }
