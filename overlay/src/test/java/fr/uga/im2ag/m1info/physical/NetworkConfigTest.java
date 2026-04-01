@@ -113,6 +113,15 @@ class NetworkConfigTest {
         NetworkConfig nc = NetworkConfig.fromFile(cfg);
 
         assertThrows(IllegalArgumentException.class, () -> nc.validateNodeId(-1));
+
+        try {
+            nc.validateNodeId(-1);
+        } catch (IllegalArgumentException e) {
+            String msg = e.getMessage();
+            System.out.println("Caught expected exception: " + msg);
+            assertNotNull(msg, "Exception message should not be null");
+            assertTrue(msg.contains("[0, 1]"), "Exception message should indicate the valid range of row indices");
+        }
     }
 
     @Test
@@ -121,6 +130,14 @@ class NetworkConfigTest {
         NetworkConfig nc = NetworkConfig.fromFile(cfg);
 
         assertThrows(IllegalArgumentException.class, () -> nc.validateNodeId(2));
+
+        try {
+            nc.validateNodeId(2);
+        } catch (IllegalArgumentException e) {
+            String msg = e.getMessage();
+            assertNotNull(msg, "Exception message should not be null");
+            assertTrue(msg.contains("[0, 1]"), "Exception message should indicate the valid range of column indices");
+        }
     }
 
     @Test
