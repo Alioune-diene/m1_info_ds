@@ -134,4 +134,144 @@ class SpanningTreeManagerUnitTest {
                 argThat(e -> e.getTreeVersion() == 0 && e.getType() == Envelope.Type.ELECTION));
     }
 
+    // -------------------------------------------------------------------------
+    // TREE_DISCOVER handling
+    // -------------------------------------------------------------------------
 
+    @Test
+    void onTreeDiscover_shouldSetParentToSender() throws IOException {
+        SpanningTreeManager stm = new SpanningTreeManager(3, List.of(0, 4), transport);
+
+        Envelope discover = Envelope.treeDiscover(0, 0, 0, 0);
+        stm.handleEnvelope(discover, 0);
+
+        assertEquals(0, stm.getParentId(),
+                "After accepting a TREE_DISCOVER, parent must be the sender node");
+    }
+
+    @Test
+    void onTreeDiscover_shouldReplyWithParentAck() throws IOException {
+        SpanningTreeManager stm = new SpanningTreeManager(3, List.of(0, 4), transport);
+
+        stm.handleEnvelope(Envelope.treeDiscover(0, 0, 0, 0), 0);
+
+        ArgumentCaptor<Envelope> captor = ArgumentCaptor.forClass(Envelope.class);
+        verify(transport, atLeastOnce()).sendToNeighbor(eq(0), captor.capture());
+
+        boolean ackSent = captor.getAllValues().stream()
+                .anyMatch(e -> e.getType() == Envelope.Type.TREE_PARENT_ACK);
+        assertTrue(ackSent, "A TREE_PARENT_ACK must be sent back to the discover sender");
+    }
+
+    @Test
+    void onTreeDiscover_shouldRejectSecondDiscover() throws IOException {
+        // Node 3, neighbors [0, 4]. Accept parent 0; then 4 also sends a discover.
+        SpanningTreeManager stm = new SpanningTreeManager(3, List.of(0, 4), transport);
+        stm.handleEnvelope(Envelope.treeDiscover(0, 0, 0, 0), 0);
+        reset(transport);
+
+        stm.handleEnvelope(Envelope.treeDiscover(4, 0, 0, 0), 4);
+
+        ArgumentCaptor<Envelope> captor = ArgumentCaptor.forClass(Envelope.class);
+        verify(transport, atLeastOnce()).sendToNeighbor(eq(4), captor.capture());
+        boolean rejectSent = captor.getAllValues().stream()
+                .anyMatch(e -> e.getType() == Envelope.Type.TREE_REJECT);
+        assertTrue(rejectSent,
+                "A node that already has a parent must reject subsequent TREE_DISCOVER messages");
+    }
+
+    // -------------------------------------------------------------------------
+    // TREE_PARENT_ACK / TREE_REJECT handling (root side)
+    // -------------------------------------------------------------------------
+
+    @Test
+    void onTreeParentAck_shouldAddSenderToChildren() throws IOException {
+        // Node 5 has neighbors [0, 6].
+        // Drive it into BUILDING via a TREE_DISCOVER from neighbor 0 (node 0 becomes parent).
+        // Node 5 will then be waiting for ACK/REJECT from its remaining neighbor 6.
+        // When neighbor 6 replies with TREE_PARENT_ACK, node 6 must be added to children.
+        SpanningTreeManager stm = new SpanningTreeManager(5, List.of(0, 6), transport);
+
+        // TREE_DISCOVER from node 0 (root=0, version=0, level=0):
+        //   - sets parent=0, pendingAcks=1 (one other neighbor: 6), phase=BUILDING
+        //   - forwards TREE_DISCOVER to neighbor 6
+        stm.handleEnvelope(Envelope.treeDiscover(0, 0, 0, 0), 0);
+
+        // Confirm we are now in BUILDING with parent 0 before injecting the ACK.
+        assertEquals(SpanningTreeManager.Phase.BUILDING, stm.getPhase(),
+                "Precondition: node must be in BUILDING phase before receiving TREE_PARENT_ACK");
+        assertEquals(0, stm.getParentId(),
+                "Precondition: parent must be node 0 after accepting the TREE_DISCOVER");
+
+        // Neighbor 6 responds with TREE_PARENT_ACK — version matches (0), phase is BUILDING.
+        stm.handleEnvelope(Envelope.treeParentAck(6, 0), 6);
+
+        assertTrue(stm.getChildren().contains(6),
+                "TREE_PARENT_ACK must add the sender to the children set");
+    }
+
+    // -------------------------------------------------------------------------
+    // DATA handling
+    // -------------------------------------------------------------------------
+
+    @Test
+    void sendData_whileNotReady_shouldBacklogAndNotSendImmediately() throws IOException {
+        SpanningTreeManager stm = new SpanningTreeManager(7, List.of(0), transport);
+        // Phase is ELECTING — data must go to backlog, not be transmitted immediately.
+
+        stm.sendData(0, "hello");
+
+        // No DATA envelope should have been sent to the transport yet.
+        verify(transport, never()).sendToNeighbor(anyInt(),
+                argThat(e -> e.getType() == Envelope.Type.DATA));
+    }
+
+    @Test
+    void onData_shouldDeliverToHandlerWhenDestinationMatches() throws IOException {
+        SpanningTreeManager stm = new SpanningTreeManager(2, List.of(0), transport);
+        MessageHandler handler = mock(MessageHandler.class);
+        stm.start(handler);
+
+        Envelope dataEnv = Envelope.data(0, 0, 2, "targeted-payload", 0);
+        stm.handleEnvelope(dataEnv, 0);
+
+        ArgumentCaptor<Message> captor = ArgumentCaptor.forClass(Message.class);
+        verify(handler, atLeastOnce()).onMessage(captor.capture());
+
+        Message delivered = captor.getAllValues().stream()
+                .filter(m -> "targeted-payload".equals(m.getPayload()))
+                .findFirst()
+                .orElse(null);
+        assertNotNull(delivered, "Handler must receive the message addressed to this node");
+        assertEquals(0, delivered.getSourceId());
+        assertEquals(2, delivered.getDestinationId());
+    }
+
+    @Test
+    void onData_shouldDeliverToHandlerOnBroadcast() {
+        SpanningTreeManager stm = new SpanningTreeManager(3, List.of(), transport);
+        MessageHandler handler = mock(MessageHandler.class);
+        stm.start(handler);
+
+        Envelope broadcastEnv = Envelope.data(0, 0, SpanningTreeManager.BROADCAST_DEST, "broadcast-msg", 0);
+        stm.handleEnvelope(broadcastEnv, 0);
+
+        verify(handler, atLeastOnce()).onMessage(argThat(
+                m -> "broadcast-msg".equals(m.getPayload())));
+    }
+
+    @Test
+    void onData_shouldDropDuplicateMessageId() {
+        SpanningTreeManager stm = new SpanningTreeManager(3, List.of(), transport);
+        MessageHandler handler = mock(MessageHandler.class);
+        stm.start(handler);
+
+        Envelope env = Envelope.data(0, 0, SpanningTreeManager.BROADCAST_DEST, "dup", 0);
+        stm.handleEnvelope(env, 0);
+        stm.handleEnvelope(env, 0); // same envelope (same messageId)
+
+        // Handler must be called exactly once despite two deliveries.
+        verify(handler, times(1)).onMessage(any());
+    }
+
+}
