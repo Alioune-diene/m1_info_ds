@@ -32,7 +32,7 @@ public final class Envelope {
         DATA,
         /** A "are you still alive?" signal sent to tree neighbors. */
         HEARTBEAT,
-         /** Response to a heartbeat: "yes, I'm still here". */
+        /** Response to a heartbeat: "yes, I'm still here". */
         HEARTBEAT_ACK,
         /** Triggers a full tree rebuild when a dead node is detected. */
         TOPOLOGY_REBUILD
