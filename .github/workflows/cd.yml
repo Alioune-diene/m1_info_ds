@@ -1,0 +1,40 @@
+name: Build and Deploy Documentation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Generate Javadoc for overlay
+        working-directory: overlay
+        run: mvn clean javadoc:javadoc
+
+      - name: Prepare GitHub Pages content
+        run: |
+          mkdir -p public
+          cp -r overlay/target/reports/apidocs public/javadoc
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
