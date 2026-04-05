@@ -5,6 +5,10 @@ on:
     branches: ["**"]
   pull_request:
     branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build-and-test:
@@ -22,6 +26,9 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
+    outputs:
+      pit_report: ${{ steps.publish-pit.outputs.pit_report }}
 
     steps:
       - name: Checkout
@@ -43,6 +50,15 @@ jobs:
           RABBITMQ_HOST: localhost
           RABBITMQ_PORT: 5672
 
+      - name: Upload pit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pit-reports
+          path: "**/target/pit-reports"
+          retention-days: 7
+          if-no-files-found: ignore
+
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -50,3 +66,34 @@ jobs:
           name: surefire-reports
           path: "**/target/surefire-reports/*.xml"
           if-no-files-found: ignore
+
+  publish-overlay-pit:
+    name: Publish Overlay PIT report
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    concurrency:
+      group: gh-pages-publish
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download PIT report
+        uses: actions/download-artifact@v4
+        with:
+          name: pit-reports
+          path: ./overlay/target/pit-reports
+
+      - name: Compute branch folder
+        id: branch
+        run: echo "safe_name=${GITHUB_REF_NAME//\//-}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish PIT report to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./overlay/target/pit-reports
+          destination_dir: pit/${{ steps.branch.outputs.safe_name }}
+          keep_files: true

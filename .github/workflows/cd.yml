@@ -5,13 +5,21 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    types:
+      - closed
+
 
 permissions:
   contents: write
 
 jobs:
-  build-deploy:
+  build-deploy-javadoc:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    concurrency:
+      group: gh-pages-publish
+      cancel-in-progress: false
 
     steps:
       - name: Checkout repository
@@ -38,3 +46,45 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          keep_files: true
+
+  cleanup-merged-pr-pit:
+    name: Cleanup merged PR PIT reports
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: gh-pages-publish
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 0
+
+      - name: Remove PIT reports for merged source branch
+        env:
+          SOURCE_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          SAFE_BRANCH="${SOURCE_BRANCH//\//-}"
+          TARGET_DIR="pit/$SAFE_BRANCH"
+
+          if [ ! -d "$TARGET_DIR" ]; then
+            echo "No PIT report directory to remove: $TARGET_DIR"
+            exit 0
+          fi
+
+          rm -rf "$TARGET_DIR"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "chore: remove PIT report for merged branch $SAFE_BRANCH"
+          git push
