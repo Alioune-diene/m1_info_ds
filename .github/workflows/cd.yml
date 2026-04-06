@@ -34,7 +34,7 @@ jobs:
 
       - name: Generate Javadoc for overlay
         working-directory: overlay
-        run: mvn clean javadoc:javadoc allure:report
+        run: mvn clean verify javadoc:javadoc allure:report
 
       - name: Prepare GitHub Pages content
         run: |
