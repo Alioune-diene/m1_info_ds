@@ -17,9 +17,6 @@ jobs:
         ports:
           - 5672:5672
           - 15672:15672
-        env:
-          RABBITMQ_DEFAULT_USER: admin
-          RABBITMQ_DEFAULT_PASS: admin
         options: >-
           --health-cmd "rabbitmq-diagnostics -q ping"
           --health-interval 10s
@@ -45,8 +42,6 @@ jobs:
         env:
           RABBITMQ_HOST: localhost
           RABBITMQ_PORT: 5672
-          RABBITMQ_USER: admin
-          RABBITMQ_PASS: admin
 
       - name: Upload test reports
         if: always()
