@@ -1,4 +1,8 @@
 {
-  "reports": []
+  "reports": [
+    {
+      "name": "docs-gh-pages",
+      "url": "../pit/docs-gh-pages/overlay/target/pit-reports/index.html"
+    }
+  ]
 }
-
