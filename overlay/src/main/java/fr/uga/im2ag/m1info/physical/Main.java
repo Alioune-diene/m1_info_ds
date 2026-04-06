@@ -42,6 +42,18 @@ public class Main {
 
         SpanningTreeManager manager = new SpanningTreeManager(nodeId, neighbors, node);
 
+        PhysicalHostService hostService;
+        try {
+            hostService = new PhysicalHostService(nodeId, manager, node.getConnection());
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Error while initializing PhysicalHostService for node " + nodeId, e);
+            node.close();
+            System.exit(1);
+            return;
+        }
+
+        hostService.setAppHandler(msg -> System.out.printf("%n[P%d] ← MESSAGE de P%d : \"%s\"%n> ", nodeId, msg.getSourceId(), msg.getPayload()));
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\nShutting down node " + nodeId + "...");
             node.close();
@@ -56,7 +68,7 @@ public class Main {
             return;
         }
 
-        manager.start(msg -> System.out.printf("%n[Node %d] Received message from %d: \"%s\"%n> ", nodeId, msg.getSourceId(), msg.getPayload()));
+        manager.start(hostService);
 
         System.out.printf("=== Physical node %d started. Neighbors: %s ===%n", nodeId, neighbors);
         System.out.println("Commandes : 'send <dst> <message>'  |  'status'  |  'quit'");
@@ -72,7 +84,10 @@ public class Main {
                         node.close();
                         return;
                     }
-                    case "status" -> System.out.println("[Node " + nodeId + "] " + manager.getStatusSummary());
+                    case "status" -> {
+                        System.out.println("[P" + nodeId + "] " + manager.getStatusSummary());
+                        System.out.println("         virtuals hosted : " + hostService.getHostedVirtuals());
+                    }
                     default -> {
                         if (line.startsWith("send ")) {
                             handleSendCommand(line, nodeId, manager);

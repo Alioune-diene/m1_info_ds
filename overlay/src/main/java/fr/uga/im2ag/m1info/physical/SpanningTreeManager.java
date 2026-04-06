@@ -16,6 +16,8 @@ public class SpanningTreeManager {
 
     public enum Phase { ELECTING, BUILDING, READY }
 
+    public static final int BROADCAST_DEST = -1;
+
     private int nodeId;
     private final List<Integer> neighbors;
     private final PhysicalNode transport;
@@ -285,13 +287,17 @@ public class SpanningTreeManager {
             return;
         }
 
-        if (env.getDataDestId() == nodeId) {
+        boolean isBroadcast = env.getDataDestId() == BROADCAST_DEST;
+        boolean isForMe = env.getDataDestId() == nodeId;
+
+        if (isForMe || isBroadcast) {
             MessageHandler h = appHandler;
             if (h != null) { h.onMessage(new Message(env.getDataSourceId(), env.getDataDestId(), env.getPayload())); }
-            return;
         }
 
-        if (getPhase() == Phase.READY) { floodOnTree(env, from); } else { dataBacklog.add(env); }
+        if (!isForMe) {
+            if (getPhase() == Phase.READY) { floodOnTree(env, from); } else { dataBacklog.add(env); }
+        }
     }
 
     private void floodOnTree(Envelope env, int except) {
@@ -309,12 +315,14 @@ public class SpanningTreeManager {
     private void flushDataBacklog() {
         Envelope env;
         while ((env = dataBacklog.poll()) != null) {
-            if (env.getDataDestId() == nodeId) {
+            boolean isBroadcast = env.getDataDestId() == BROADCAST_DEST;
+            boolean isForMe = env.getDataDestId() == nodeId;
+
+            if (isForMe || isBroadcast) {
                 MessageHandler h = appHandler;
                 if (h != null) { h.onMessage(new Message(env.getDataSourceId(), env.getDataDestId(), env.getPayload())); }
-            } else {
-                floodOnTree(env, -1);
             }
+            if (!isForMe) { floodOnTree(env, -1); }
         }
     }
 
