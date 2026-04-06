@@ -6,8 +6,6 @@ import org.mockito.ArgumentCaptor;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -113,7 +111,7 @@ class SpanningTreeManagerUnitTest {
         stm.handleEnvelope(Envelope.election(1, 0, 0), 1);
 
         // Capture all sendToNeighbor(1, ...) calls – there should be none carrying an ELECTION.
-        ArgumentCaptor<Envelope> captor = ArgumentCaptor.forClass(Envelope.class);
+        ArgumentCaptor.forClass(Envelope.class);
         verify(transport, never()).sendToNeighbor(eq(1), argThat(
                 e -> e.getType() == Envelope.Type.ELECTION));
     }
@@ -139,7 +137,7 @@ class SpanningTreeManagerUnitTest {
     // -------------------------------------------------------------------------
 
     @Test
-    void onTreeDiscover_shouldSetParentToSender() throws IOException {
+    void onTreeDiscover_shouldSetParentToSender() {
         SpanningTreeManager stm = new SpanningTreeManager(3, List.of(0, 4), transport);
 
         Envelope discover = Envelope.treeDiscover(0, 0, 0, 0);
@@ -180,12 +178,25 @@ class SpanningTreeManagerUnitTest {
                 "A node that already has a parent must reject subsequent TREE_DISCOVER messages");
     }
 
+    @Test
+    void onTreeDiscover_withOlderVersion_shouldRejectWithCurrentVersion() throws IOException {
+        SpanningTreeManager stm = new SpanningTreeManager(3, List.of(0, 4), transport);
+
+        stm.handleEnvelope(Envelope.treeDiscover(0, 0, 2, 0), 0);
+        reset(transport);
+
+        stm.handleEnvelope(Envelope.treeDiscover(4, 0, 1, 0), 4);
+
+        verify(transport, atLeastOnce()).sendToNeighbor(eq(4), argThat(
+                e -> e.getType() == Envelope.Type.TREE_REJECT && e.getTreeVersion() == 2));
+    }
+
     // -------------------------------------------------------------------------
     // TREE_PARENT_ACK / TREE_REJECT handling (root side)
     // -------------------------------------------------------------------------
 
     @Test
-    void onTreeParentAck_shouldAddSenderToChildren() throws IOException {
+    void onTreeParentAck_shouldAddSenderToChildren() {
         // Node 5 has neighbors [0, 6].
         // Drive it into BUILDING via a TREE_DISCOVER from neighbor 0 (node 0 becomes parent).
         // Node 5 will then be waiting for ACK/REJECT from its remaining neighbor 6.
@@ -227,7 +238,7 @@ class SpanningTreeManagerUnitTest {
     }
 
     @Test
-    void onData_shouldDeliverToHandlerWhenDestinationMatches() throws IOException {
+    void onData_shouldDeliverToHandlerWhenDestinationMatches() {
         SpanningTreeManager stm = new SpanningTreeManager(2, List.of(0), transport);
         MessageHandler handler = mock(MessageHandler.class);
         stm.start(handler);
@@ -274,6 +285,58 @@ class SpanningTreeManagerUnitTest {
         verify(handler, times(1)).onMessage(any());
     }
 
+    @Test
+    void sendData_backloggedBeforeReady_shouldBeFlushedAfterTreeBecomesReady() throws IOException {
+        SpanningTreeManager stm = new SpanningTreeManager(7, List.of(0), transport);
+
+        stm.sendData(42, "queued-before-ready");
+        verify(transport, never()).sendToNeighbor(anyInt(), argThat(e -> e.getType() == Envelope.Type.DATA));
+
+        stm.handleEnvelope(Envelope.treeDiscover(0, 0, 0, 0), 0);
+
+        verify(transport, timeout(1000).atLeastOnce()).sendToNeighbor(eq(0), argThat(
+                e -> e.getType() == Envelope.Type.DATA
+                        && e.getDataDestId() == 42
+                        && "queued-before-ready".equals(e.getPayload())));
+        assertEquals(SpanningTreeManager.Phase.READY, stm.getPhase());
+    }
+
+    @Test
+    void onData_whenReady_shouldForwardToTreeNeighborsExceptSender() throws IOException {
+        SpanningTreeManager stm = new SpanningTreeManager(5, List.of(0, 6), transport);
+
+        stm.handleEnvelope(Envelope.treeDiscover(0, 0, 0, 0), 0);
+        stm.handleEnvelope(Envelope.treeParentAck(6, 0), 6);
+        assertEquals(SpanningTreeManager.Phase.READY, stm.getPhase());
+
+        reset(transport);
+        stm.handleEnvelope(Envelope.data(0, 0, 9, "forward-me", 0), 0);
+
+        verify(transport, timeout(1000).atLeastOnce()).sendToNeighbor(eq(6), argThat(
+                e -> e.getType() == Envelope.Type.DATA
+                        && e.getDataDestId() == 9
+                        && "forward-me".equals(e.getPayload())));
+        verify(transport, never()).sendToNeighbor(eq(0), argThat(e -> e.getType() == Envelope.Type.DATA));
+    }
+
+    @Test
+    void onData_whenTargetIsSelf_shouldDeliverWithoutForwarding() throws IOException {
+        SpanningTreeManager stm = new SpanningTreeManager(5, List.of(0, 6), transport);
+        MessageHandler handler = mock(MessageHandler.class);
+        stm.setHandler(handler);
+
+        stm.handleEnvelope(Envelope.treeDiscover(0, 0, 0, 0), 0);
+        stm.handleEnvelope(Envelope.treeParentAck(6, 0), 6);
+        assertEquals(SpanningTreeManager.Phase.READY, stm.getPhase());
+
+        reset(transport);
+        stm.handleEnvelope(Envelope.data(0, 0, 5, "for-me", 0), 0);
+
+        verify(handler, atLeastOnce()).onMessage(argThat(
+                m -> m.getSourceId() == 0 && m.getDestinationId() == 5 && "for-me".equals(m.getPayload())));
+        verify(transport, never()).sendToNeighbor(anyInt(), argThat(e -> e.getType() == Envelope.Type.DATA));
+    }
+
     // -------------------------------------------------------------------------
     // HEARTBEAT / HEARTBEAT_ACK handling
     // -------------------------------------------------------------------------
@@ -297,7 +360,7 @@ class SpanningTreeManagerUnitTest {
     // -------------------------------------------------------------------------
 
     @Test
-    void onTopologyRebuild_shouldBroadcastRebuildMessageToAllNeighbors() throws IOException {
+    void onTopologyRebuild_shouldBroadcastRebuildMessageToAllNeighbors() {
         SpanningTreeManager stm = new SpanningTreeManager(3, List.of(0, 1, 4), transport);
 
         Envelope rebuild = Envelope.rebuild(0, 5);
@@ -309,7 +372,7 @@ class SpanningTreeManagerUnitTest {
     }
 
     @Test
-    void onTopologyRebuild_shouldIgnoreOlderOrEqualVersion() throws IOException {
+    void onTopologyRebuild_shouldIgnoreOlderOrEqualVersion() {
         SpanningTreeManager stm = new SpanningTreeManager(3, List.of(0), transport);
         // Deliver a higher-version message first to bump the stored treeVersion.
         stm.handleEnvelope(Envelope.rebuild(0, 10), 0);
@@ -319,6 +382,23 @@ class SpanningTreeManagerUnitTest {
         stm.handleEnvelope(Envelope.rebuild(0, 5), 0);
 
         verify(transport, never()).broadcast(argThat(e -> e.getTreeVersion() == 5));
+    }
+
+    @Test
+    void onElection_whenAlreadyReady_shouldTriggerRebuildWithHigherVersion() {
+        SpanningTreeManager stm = new SpanningTreeManager(5, List.of(0, 6), transport);
+
+        stm.handleEnvelope(Envelope.treeDiscover(0, 0, 0, 0), 0);
+        stm.handleEnvelope(Envelope.treeParentAck(6, 0), 6);
+        assertEquals(SpanningTreeManager.Phase.READY, stm.getPhase());
+
+        reset(transport);
+        stm.handleEnvelope(Envelope.election(6, 1, 0), 6);
+
+        verify(transport, atLeastOnce()).broadcast(argThat(
+                e -> e.getType() == Envelope.Type.TOPOLOGY_REBUILD && e.getTreeVersion() == 1));
+        assertEquals(1, stm.getTreeVersion());
+        assertEquals(SpanningTreeManager.Phase.ELECTING, stm.getPhase());
     }
 
     // -------------------------------------------------------------------------
