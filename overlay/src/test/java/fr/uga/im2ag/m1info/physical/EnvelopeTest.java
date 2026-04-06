@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link Envelope}.
- *
+ * <p>
  * These tests are purely in-memory and require no external infrastructure.
  */
 class EnvelopeTest {
@@ -16,6 +16,13 @@ class EnvelopeTest {
     // -------------------------------------------------------------------------
     // Factory methods ~ happy path
     // -------------------------------------------------------------------------
+
+    @Test
+    void election_shouldPopulateRootCandidate() {
+        Envelope env = Envelope.election(1, 42, 3);
+
+        assertEquals(42, env.getRootCandidateId(), "Election envelope must carry the root candidate ID");
+    }
 
     @Test
     void election_shouldPopulateAllFields() {
@@ -142,18 +149,27 @@ class EnvelopeTest {
     void toString_shouldNotThrowForAnyType() {
         Envelope[] envelopes = {
             Envelope.election(0, 0, 0),
-            Envelope.treeDiscover(0, 0, 0, 0),
-            Envelope.treeParentAck(0, 0),
-            Envelope.treeReject(0, 0),
-            Envelope.data(0, 0, 1, "test", 0),
-            Envelope.heartbeat(0, 0),
-            Envelope.heartbeatAck(0, 0),
-            Envelope.rebuild(0, 1)
+            Envelope.treeDiscover(1, 0, 0, 0),
+            Envelope.treeParentAck(2, 0),
+            Envelope.treeReject(3, 0),
+            Envelope.data(4, 0, 1, "test", 0),
+            Envelope.heartbeat(5, 0),
+            Envelope.heartbeatAck(6, 0),
+            Envelope.rebuild(7, 1)
         };
 
         for (Envelope env : envelopes) {
-            assertDoesNotThrow(env::toString,
-                    "toString() must not throw for type " + env.getType());
+            assertDoesNotThrow(env::toString, "toString() must not throw for type " + env.getType());
+            assertNotNull(env.toString(), "toString() must return a non-null string");
+            assertFalse(env.toString().isEmpty(), "toString() must return a non-empty string");
+
+            assertTrue(env.toString().contains(env.getType().name()), "toString() should include the envelope type");
+            assertTrue(env.toString().contains("type=" + env.getType().name()), "toString() should include the type field");
+            assertTrue(env.toString().contains("sender=" + env.getSenderId()), "toString() should include the senderId field");
+            assertTrue(env.toString().contains("v=" + env.getTreeVersion()), "toString() should include the treeVersion field");
+            assertTrue(env.toString().contains("rootCand=" + env.getRootCandidateId()), "toString() should include the rootCandidateId field");
+            assertTrue(env.toString().contains("dst=" + env.getDataDestId()), "toString() should include the data destination field for data envelopes");
+            assertTrue(env.toString().contains("msgId=" + (env.getMessageId() != null ? env.getMessageId().substring(0, 8) : "-")), "toString() should include the message ID prefix");
         }
     }
 
