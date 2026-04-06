@@ -69,6 +69,11 @@ public class SpanningTreeManager {
         startElection(0);
     }
 
+    /** Replace the application handler without restarting the election. */
+    public void setHandler(MessageHandler handler) {
+        this.appHandler = handler;
+    }
+
     private void startElection(int version) {
         synchronized (stateLock) {
             if (version < treeVersion) { return; }

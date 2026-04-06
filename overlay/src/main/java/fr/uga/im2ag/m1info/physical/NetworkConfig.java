@@ -63,7 +63,7 @@ public class NetworkConfig {
 
     public int getNodeCount() { return nodeCount; }
 
-    public void validateNodeId(int nodeId) {
+    public void validateNodeId(int nodeId) throws IllegalArgumentException {
         if (nodeId < 0 || nodeId >= nodeCount) {
             throw new IllegalArgumentException("nodeId " + nodeId + " is out of bounds [0, " + (nodeCount - 1) + "]");
         }
