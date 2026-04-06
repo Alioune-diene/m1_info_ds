@@ -1,4 +1,8 @@
 {
-  "reports": []
+  "reports": [
+    {
+      "name": "main",
+      "url": "../pit/main/overlay/target/pit-reports/index.html"
+    }
+  ]
 }
-
