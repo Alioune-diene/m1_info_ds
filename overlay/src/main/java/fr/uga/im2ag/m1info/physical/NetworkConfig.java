@@ -1,8 +1,5 @@
 package fr.uga.im2ag.m1info.physical;
 
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -10,6 +7,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+//Reads and stores the physical network topology from a JSON configuration file
+//The configuration file describes:
+//How many nodes exist in the network (nodeCount)
+// Which nodes are directly connected to each other (adjacency matrix)
+
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 public class NetworkConfig {
     private static class JsonConfig {
@@ -19,8 +23,9 @@ public class NetworkConfig {
         @SerializedName("adjacency")
         int[][] adjacency;
     }
-
+      // Total number of nodes in the physical network
     private final int nodeCount;
+     // adjacency[i][j] = true means node i and node j are directly connected
     private final boolean[][] adjacency;
 
     private NetworkConfig(int nodeCount, boolean[][] adjacency) {
@@ -51,7 +56,8 @@ public class NetworkConfig {
         }
         return new NetworkConfig(raw.nodeCount, adj);
     }
-
+    // Returns the list of nodes directly connected (neighbors) to a given node
+    //Used by each node at startup to know who it can talk to directly.
     public List<Integer> getNeighbors(int nodeId) {
         validateNodeId(nodeId);
         List<Integer> neighbors = new ArrayList<>();
@@ -62,7 +68,7 @@ public class NetworkConfig {
     }
 
     public int getNodeCount() { return nodeCount; }
-
+    //Validates that a given nodeId is within the valid range [0, nodeCount-1]
     public void validateNodeId(int nodeId) {
         if (nodeId < 0 || nodeId >= nodeCount) {
             throw new IllegalArgumentException("nodeId " + nodeId + " is out of bounds [0, " + (nodeCount - 1) + "]");
