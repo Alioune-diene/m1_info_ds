@@ -116,8 +116,8 @@ class VirtualLayerIntegrationTest {
 
     @Test
     void virtualNode_shouldAssignInitialHostAsVirtualIdModNumPhysical() {
-        try (VirtualNode vn = openVirtual(3, 6, 3)) {
-            // virtualId=3 % numPhysical=3 → initial host=1
+        try (VirtualNode vn = openVirtual(4, 6, 3)) {
+            // virtualId=4 % numPhysical=3 → initial host=1
             assertEquals(1, vn.getCurrentHost(),
                     "Initial host must be virtualId mod numPhysical");
         } catch (IOException | TimeoutException e) {
