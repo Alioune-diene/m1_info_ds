@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M1-IDS - Hub</title>
+    <title>M1-IDS - Mutation Report</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -16,24 +16,21 @@
     </header>
 
     <div class="grid">
-        <a href="https://alioune-diene.github.io/m1_info_ds/" class="card" target="_blank">
+        <a href="https://alioune-diene.github.io/m1_info_ds/" class="card" target="_blank" rel="noopener noreferrer">
             <h2>Home</h2>
             <p>Back to the main hub</p>
         </a>
-
-        <a href="#" class="card" id="todo">
-            <h2>Todo</h2>
-            <p>In the future, this page will provide a branch selector to see mutation testing reports for different
-                active branches.</p>
-        </a>
     </div>
+
+    <p id="reports-status" class="subtitle">Loading mutation reports...</p>
+    <div class="grid" id="reports-grid"></div>
 
     <footer>
         M1-IDS · Université Grenoble Alpes
     </footer>
 </div>
 
-<script src=""></script>
+<script src="./script.js"></script>
 
 </body>
 </html>
