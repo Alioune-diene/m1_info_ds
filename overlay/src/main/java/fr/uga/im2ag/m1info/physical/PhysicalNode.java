@@ -71,6 +71,8 @@ public class PhysicalNode implements AutoCloseable {
 
     public List<Integer> getNeighbors() { return neighbors; }
 
+    public Connection getConnection() { return connection; }
+
     @Override
     public void close() {
         try {

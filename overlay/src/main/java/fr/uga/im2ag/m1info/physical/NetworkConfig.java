@@ -68,7 +68,7 @@ public class NetworkConfig {
     }
 
     public int getNodeCount() { return nodeCount; }
-    //Validates that a given nodeId is within the valid range [0, nodeCount-1]
+
     public void validateNodeId(int nodeId) {
         if (nodeId < 0 || nodeId >= nodeCount) {
             throw new IllegalArgumentException("nodeId " + nodeId + " is out of bounds [0, " + (nodeCount - 1) + "]");
