@@ -77,14 +77,45 @@ jobs:
           SOURCE_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
           SAFE_BRANCH="${SOURCE_BRANCH//\//-}"
+          export SAFE_BRANCH
           TARGET_DIR="pit/$SAFE_BRANCH"
 
-          if [ ! -d "$TARGET_DIR" ]; then
+          if [ -d "$TARGET_DIR" ]; then
+            rm -rf "$TARGET_DIR"
+          else
             echo "No PIT report directory to remove: $TARGET_DIR"
-            exit 0
           fi
 
-          rm -rf "$TARGET_DIR"
+          REPORTS_FILE="mutation/reports.json"
+          if [ -f "$REPORTS_FILE" ]; then
+            python - <<'PY'
+            import json
+            import os
+            from pathlib import Path
+
+            safe_branch = os.environ['SAFE_BRANCH']
+            manifest_path = Path('mutation/reports.json')
+
+            with manifest_path.open('r', encoding='utf-8') as f:
+              data = json.load(f)
+
+            reports = data.get('reports', [])
+            if not isinstance(reports, list):
+              reports = []
+
+            filtered = []
+            for entry in reports:
+              if isinstance(entry, dict) and isinstance(entry.get('name'), str) and isinstance(entry.get('url'), str):
+                if entry['name'] != safe_branch:
+                  filtered.append({'name': entry['name'], 'url': entry['url']})
+
+            filtered.sort(key=lambda entry: entry['name'].lower())
+
+            with manifest_path.open('w', encoding='utf-8') as f:
+              json.dump({'reports': filtered}, f, indent=2)
+              f.write('\n')
+            PY
+          fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

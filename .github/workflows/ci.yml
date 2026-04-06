@@ -90,10 +90,61 @@ jobs:
         id: branch
         run: echo "safe_name=${GITHUB_REF_NAME//\//-}" >> "$GITHUB_OUTPUT"
 
+      - name: Build mutation reports manifest
+        env:
+          SAFE_BRANCH: ${{ steps.branch.outputs.safe_name }}
+        run: |
+          mkdir -p .mutation-manifest
+
+          if git ls-remote --exit-code --heads origin gh-pages >/dev/null 2>&1; then
+            git fetch --depth=1 origin gh-pages
+            git show origin/gh-pages:mutation/reports.json > .mutation-manifest/reports.json 2>/dev/null || echo '{"reports": []}' > .mutation-manifest/reports.json
+          else
+            echo '{"reports": []}' > .mutation-manifest/reports.json
+          fi
+
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          manifest_path = Path('.mutation-manifest/reports.json')
+          safe_branch = os.environ['SAFE_BRANCH']
+          report_url = f"../pit/{safe_branch}/overlay/target/pit-reports/index.html"
+
+          with manifest_path.open('r', encoding='utf-8') as f:
+              data = json.load(f)
+
+          reports = data.get('reports', [])
+          if not isinstance(reports, list):
+              reports = []
+
+          normalized = []
+          for entry in reports:
+              if isinstance(entry, dict) and isinstance(entry.get('name'), str) and isinstance(entry.get('url'), str):
+                  normalized.append({'name': entry['name'], 'url': entry['url']})
+
+          normalized = [entry for entry in normalized if entry['name'] != safe_branch]
+          normalized.append({'name': safe_branch, 'url': report_url})
+          normalized.sort(key=lambda entry: entry['name'].lower())
+
+          with manifest_path.open('w', encoding='utf-8') as f:
+              json.dump({'reports': normalized}, f, indent=2)
+              f.write('\n')
+          PY
+
       - name: Publish PIT report to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./overlay/target/pit-reports
           destination_dir: pit/${{ steps.branch.outputs.safe_name }}
+          keep_files: true
+
+      - name: Publish mutation reports manifest
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./.mutation-manifest
+          destination_dir: mutation
           keep_files: true
