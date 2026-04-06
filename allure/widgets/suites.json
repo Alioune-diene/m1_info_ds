@@ -1,0 +1,1 @@
+{"total":2,"items":[{"uid":"326150a8c167214f210e8c282a2a2026","name":"fr.uga.im2ag.m1info.physical.EnvelopeTest","statistic":{"failed":4,"broken":6,"skipped":0,"passed":8,"unknown":0,"total":18}},{"uid":"cf89ac2cd9bbf068c9ddcfa42ebf6b2e","name":"fr.uga.im2ag.m1info.physical.NetworkConfigTest","statistic":{"failed":4,"broken":1,"skipped":0,"passed":6,"unknown":0,"total":11}}]}
