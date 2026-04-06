@@ -40,7 +40,7 @@ jobs:
         run: |
           mkdir -p public
           cp -r overlay/target/reports/apidocs public/javadoc
-          cp -r overlay/target/site/allure-maven public/allure
+          cp -r overlay/target/site/allure-maven-plugin public/allure
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
