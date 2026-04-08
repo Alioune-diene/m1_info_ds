@@ -22,14 +22,14 @@ import java.util.logging.Logger;
  * <p>
  * PhysicalHostService does two things:
  * <ul>
- *  <li> LISTENS on a special "virtual command" queue (physical.node.<id>.virt)
+ *  <li> LISTENS on a special "virtual command" queue ({@code physical.node.<id>.virt})
  *     for commands from virtual nodes (REGISTER, HEARTBEAT, DATA).</li>
  *  <li> DELIVERS incoming virtual messages to the correct local virtual node's queue
- *     (virtual.node.<virtualId>) when a message arrives through the physical tree.</li>
+ *     ({@code virtual.node.<virtualId>}) when a message arrives through the physical tree.</li>
  * </ul>
  * Flow - Outgoing (virtual → physical → network):
  * <pre>
- *   VirtualNode sends to physical.node.<hostId>.virt
+ *   VirtualNode sends to {@code physical.node.<hostId>.virt}
  *   → PhysicalHostService.handleVirtualCommand()
  *   → SpanningTreeManager.sendData() [broadcasts through the spanning tree]
  * </pre>
@@ -38,7 +38,7 @@ import java.util.logging.Logger;
  *   PhysicalNode receives a DATA envelope carrying a VirtualEnvelope
  *   → SpanningTreeManager delivers it to the app handler (this.onMessage())
  *   → PhysicalHostService.deliverToLocalVirtual()
- *   → publishes to virtual.node.<destVirtualId> queue
+ *   → publishes to {@code virtual.node.<destVirtualId>} queue
  * </pre>
  * <p>
  * Implements MessageHandler so it can be plugged into SpanningTreeManager as the app handler.
