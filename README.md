@@ -5,6 +5,11 @@
 
 M1 Informatique - Université Grenoble Alpes
 
+## Github Pages
+
+The javadoc and other report files are published on the `gh-pages` branch and can be accessed at:
+https://alioune-diene.github.io/m1_info_ds/
+
 ## Repository Structure
 
 ```bash
