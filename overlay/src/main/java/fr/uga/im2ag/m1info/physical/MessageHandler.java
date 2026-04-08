@@ -1,7 +1,16 @@
 package fr.uga.im2ag.m1info.physical;
-//  A simple callback interface used to handle incoming messages
-// Any class that wants to react to received messages implements this interface
+
+/**
+ * A simple callback interface used to handle incoming messages
+ * Any class that wants to react to received messages implements this interface
+ */
 @FunctionalInterface
 public interface MessageHandler {
+
+    /**
+     * Called by SpanningTreeManager when a new message is received from the network.
+     * The message is already parsed and ready to be processed.
+     * The implementation of this method defines how the application reacts to incoming messages.
+     */
     void onMessage(Message message);
 }

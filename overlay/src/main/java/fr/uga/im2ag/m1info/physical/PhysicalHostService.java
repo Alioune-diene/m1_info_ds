@@ -1,5 +1,11 @@
 package fr.uga.im2ag.m1info.physical;
 
+import com.google.gson.Gson;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.DeliverCallback;
+import fr.uga.im2ag.m1info.virtual.VirtualEnvelope;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
@@ -7,77 +13,97 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.google.gson.Gson;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.DeliverCallback;
-
-import fr.uga.im2ag.m1info.virtual.VirtualEnvelope;
 /**
  * The bridge between the physical layer and the virtual layer.
- *
+ * <p>
  * Each physical node can "host" one or more virtual nodes.
  * A virtual node is a logical process that doesn't have its own physical network —
  * it relies on the physical node's spanning tree to communicate.
- *
+ * <p>
  * PhysicalHostService does two things:
- *
- *  1. LISTENS on a special "virtual command" queue (physical.node.<id>.virt)
- *     for commands from virtual nodes (REGISTER, HEARTBEAT, DATA).
- *
- *  2. DELIVERS incoming virtual messages to the correct local virtual node's queue
- *     (virtual.node.<virtualId>) when a message arrives through the physical tree.
- *
+ * <ul>
+ *  <li> LISTENS on a special "virtual command" queue (physical.node.<id>.virt)
+ *     for commands from virtual nodes (REGISTER, HEARTBEAT, DATA).</li>
+ *  <li> DELIVERS incoming virtual messages to the correct local virtual node's queue
+ *     (virtual.node.<virtualId>) when a message arrives through the physical tree.</li>
+ * </ul>
  * Flow - Outgoing (virtual → physical → network):
+ * <pre>
  *   VirtualNode sends to physical.node.<hostId>.virt
  *   → PhysicalHostService.handleVirtualCommand()
  *   → SpanningTreeManager.sendData() [broadcasts through the spanning tree]
- *
+ * </pre>
  * Flow - Incoming (network → physical → virtual):
+ * <pre>
  *   PhysicalNode receives a DATA envelope carrying a VirtualEnvelope
  *   → SpanningTreeManager delivers it to the app handler (this.onMessage())
  *   → PhysicalHostService.deliverToLocalVirtual()
  *   → publishes to virtual.node.<destVirtualId> queue
- *
+ * </pre>
+ * <p>
  * Implements MessageHandler so it can be plugged into SpanningTreeManager as the app handler.
  */
-
 public class PhysicalHostService implements MessageHandler {
 
+    // -------------------- Attributes ---------------------------------------------------------------------------------
     private static final Logger LOG = Logger.getLogger(PhysicalHostService.class.getName());
-      /**
+
+    /**
      * The suffix added to a physical node's queue name to create the "virtual command" queue.
      * Example: physical node 2 → virtual command queue = "physical.node.2.virt"
      */
     public static final String VIRT_CMD_SUFFIX = ".virt";
 
-    private final int physicalId;  // ID of the physical node we're serving
-    private final SpanningTreeManager manager;// used to broadcast virtual data messages
+    /**
+     * ID of the physical node we're serving
+     */
+    private final int physicalId;
+
+    /**
+     * used to broadcast virtual data messages
+     */
+    private final SpanningTreeManager manager;
+
+    /**
+     * Gson instance for JSON serialization/deserialization of VirtualEnvelopes in message payloads.
+     */
     private final Gson gson = new Gson();
-     /**
+
+    /**
      * Set of virtual node IDs currently hosted on this physical node.
      * Virtual nodes register themselves here, then can send/receive data.
      */
-
     private final Set<Integer> hostedVirtuals = ConcurrentHashMap.newKeySet();
-    private final Channel cmdChannel;  // dedicated channel for virtual command messages
-    private volatile MessageHandler appHandler;  // optional extra handler for non-virtual messages
-     /**
+
+    /**
+     * Dedicated channel for virtual command messages
+     */
+    private final Channel cmdChannel;
+
+    /**
+     * Optional extra handler for non-virtual messages
+     */
+    private volatile MessageHandler appHandler;
+
+    // -------------------- Constructors -------------------------------------------------------------------------------
+
+    /**
      * Creates a PhysicalHostService and starts listening on the virtual command queue.
      *
      * @param physicalId  ID of the hosting physical node
      * @param manager     the spanning tree manager (for broadcasting virtual data)
      * @param connection  the RabbitMQ connection (shared with PhysicalNode)
      */
-
     public PhysicalHostService(int physicalId, SpanningTreeManager manager, Connection connection) throws IOException {
         this.physicalId = physicalId;
         this.manager = manager;
         this.cmdChannel = connection.createChannel();
+
          // Declare the virtual command queue: this is how virtual nodes talk to us
         String cmdQueue = cmdQueue();
         cmdChannel.queueDeclare(cmdQueue, false, false, false, null);
-         // Set up the listener: parse incoming virtual envelopes and dispatch them
+
+        // Set up the listener: parse incoming virtual envelopes and dispatch them
         DeliverCallback cb = (tag, delivery) -> {
             String raw = new String(delivery.getBody(), StandardCharsets.UTF_8);
             if (raw.startsWith(VirtualEnvelope.PAYLOAD_PREFIX)) {
@@ -92,7 +118,12 @@ public class PhysicalHostService implements MessageHandler {
         cmdChannel.basicConsume(cmdQueue, true, cb, tag -> {});
         LOG.info(() -> "[P" + physicalId + "] PhysicalHostService ready - queue : " + cmdQueue);
     }
-     /** set a fallback handler for non-virtual application messages. */
+
+    // -------------------- Methods ------------------------------------------------------------------------------------
+
+    /**
+     * Set a fallback handler for non-virtual application messages.
+     */
     public void setAppHandler(MessageHandler appHandler) {
         this.appHandler = appHandler;
     }
@@ -103,7 +134,6 @@ public class PhysicalHostService implements MessageHandler {
      * we try to deliver it to a locally hosted virtual node.
      * Otherwise, pass it to the optional appHandler.
      */
-
     @Override
     public void onMessage(Message msg) {
         String payload = msg.getPayload();
@@ -114,7 +144,7 @@ public class PhysicalHostService implements MessageHandler {
             VirtualEnvelope env = gson.fromJson(json, VirtualEnvelope.class);
             deliverToLocalVirtual(env);// check if the dest virtual is hosted here
         } else {
-             // Regular (non-virtual) physical message — forward to app handler if set
+            // Regular (non-virtual) physical message — forward to app handler if set
             MessageHandler h = appHandler;
             if (h != null) { h.onMessage(msg); }
         }
@@ -122,13 +152,14 @@ public class PhysicalHostService implements MessageHandler {
 
     /**
      * Handles commands coming directly from local virtual nodes on the cmd queue.
-     *
+     * <p>
      * Three command types:
-     *  - VIRTUAL_REGISTER:  Virtual node V<id> is now hosted here → record it, send ACK
-     *  - VIRTUAL_HEARTBEAT: Virtual node is still alive → send ACK (so it doesn't migrate)
-     *  - VIRTUAL_DATA:      Virtual node wants to send data → broadcast via spanning tree
+     * <ul>
+     *  <li>VIRTUAL_REGISTER:  Virtual node V<id> is now hosted here → record it, send ACK</li>
+     *  <li>VIRTUAL_HEARTBEAT: Virtual node is still alive → send ACK (so it doesn't migrate)</li>
+     *  <li>VIRTUAL_DATA:      Virtual node wants to send data → broadcast via spanning tree</li>
+     * </ul>
      */
-
     private void handleVirtualCommand(VirtualEnvelope env) {
         switch (env.getType()) {
 
@@ -146,7 +177,7 @@ public class PhysicalHostService implements MessageHandler {
             }
 
             case VIRTUAL_DATA -> {
-                  // Virtual node wants to send data to another virtual node
+                // Virtual node wants to send data to another virtual node
                 // We wrap the VirtualEnvelope in a physical DATA message and broadcast it
                 // through the spanning tree so it reaches every physical node
                 String routed = VirtualEnvelope.PAYLOAD_PREFIX + gson.toJson(env);
@@ -157,14 +188,14 @@ public class PhysicalHostService implements MessageHandler {
             default -> LOG.warning(() -> "[P" + physicalId + "] Virtual command not recognized: " + env);
         }
     }
+
     /**
      * Tries to deliver an incoming virtual message to a locally hosted virtual node.
-     *
+     * <p>
      * Only handles VIRTUAL_DATA type (other types wouldn't come through the spanning tree).
      * If the destination virtual node is hosted here, publishes directly to its queue.
      * If not, does nothing (the message was broadcast and some other physical host will handle it).
      */
-
     private void deliverToLocalVirtual(VirtualEnvelope env) {
         if (env.getType() != VirtualEnvelope.Type.VIRTUAL_DATA) { return; }
         int destId = env.getVirtualDestId();
@@ -181,12 +212,12 @@ public class PhysicalHostService implements MessageHandler {
             LOG.log(Level.WARNING, "[P" + physicalId + "] Delivery failure for V" + destId + " (hosted: " + hostedVirtuals + ")", e);
         }
     }
-      /**
+
+    /**
      * Sends a VIRTUAL_HEARTBEAT_ACK to a virtual node's own queue.
      * This tells the virtual node: "I (physical node <physicalId>) acknowledge your heartbeat.
-     *  You don't need to migrate."
+     * You don't need to migrate."
      */
-
     private void sendAckToVirtual(int virtualId) {
         VirtualEnvelope ack = VirtualEnvelope.heartbeatAck(virtualId, physicalId);
         String json  = VirtualEnvelope.PAYLOAD_PREFIX + gson.toJson(ack);
@@ -198,7 +229,14 @@ public class PhysicalHostService implements MessageHandler {
         }
     }
 
-    public Set<Integer> getHostedVirtuals() { return Set.copyOf(hostedVirtuals); }
+    /**
+     * Helper to get the set of virtual node IDs currently hosted on this physical node.
+     * Used by PhysicalNode to know which virtual nodes are running here (for migration decisions).
+     */
+    public Set<Integer> getHostedVirtuals() {
+        return Set.copyOf(hostedVirtuals);
+    }
 
+    /** Helper to get the name of the virtual command queue for this physical node. */
     private String cmdQueue() { return "physical.node." + physicalId + VIRT_CMD_SUFFIX; }
 }
