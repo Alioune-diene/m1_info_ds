@@ -14,12 +14,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_1'/>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_1'/>
 1
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_1'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_1'></a>
 <span>
 </span>
 </span>
@@ -28,26 +28,320 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_2'/>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_2'/>
 2
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_2'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_2'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''></span></pre></td></tr>
+<td class=''><pre><span  class=''>/**</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_3'/>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_3'/>
 3
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_3'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_3'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * The message format used exclusively between virtual nodes and their physical hosts.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_4'/>
+4
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_4'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_5'/>
+5
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_5'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * While the physical layer uses `Envelope` for its own protocol (election, tree building, ..),</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_6'/>
+6
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_6'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * the virtual layer uses `VirtualEnvelope` as its &#34;packet format&#34;.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_7'/>
+7
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_7'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_8'/>
+8
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_8'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Key design: VirtualEnvelopes are NEVER sent directly between physical nodes.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_9'/>
+9
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_9'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Instead, they are serialized to JSON and embedded inside a physical DATA envelope&#39;s payload,</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_10'/>
+10
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_10'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * prefixed with &#34;V|&#34; to distinguish them from regular physical messages.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_11'/>
+11
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_11'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_12'/>
+12
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_12'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * Example of how a VirtualEnvelope travels:</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_13'/>
+13
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_13'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *   Virtual node V2 wants to send &#34;hello&#34; to V5</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_14'/>
+14
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_14'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *   creates VirtualEnvelope.data(2, 5, ringSize, &#34;hello&#34;)</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_15'/>
+15
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_15'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *   serializes: &#34;V|{type:VIRTUAL_DATA, src:2, dst:5, payload:&#39;hello&#39;}&#34;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_16'/>
+16
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_16'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *   sends to physical host&#39;s queue (physical.node.1.virt)</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_17'/>
+17
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_17'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *   PhysicalHostService receives it, wraps it in a physical DATA broadcast</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_18'/>
+18
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_18'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *   Spanning tree floods it to all physical nodes</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_19'/>
+19
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_19'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *   The physical node hosting V5 sees V5 is local, delivers to virtual.node.5</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_20'/>
+20
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_20'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> *</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_21'/>
+21
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_21'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * The &#34;V|&#34; prefix (PAYLOAD_PREFIX) is crucial: it allows PhysicalHostService</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_22'/>
+22
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_22'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> * to distinguish virtual messages from regular physical ones just by looking at the payload.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_23'/>
+23
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_23'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''> */</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_24'/>
+24
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_24'></a>
 <span>
 </span>
 </span>
@@ -56,12 +350,68 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_4'/>
-4
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_25'/>
+25
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_4'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_25'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     /**</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_26'/>
+26
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_26'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Prefix that marks a physical payload as containing a VirtualEnvelope.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_27'/>
+27
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_27'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Every serialized VirtualEnvelope starts with &#34;V|&#34; when sent through RabbitMQ.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_28'/>
+28
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_28'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_29'/>
+29
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_29'></a>
 <span>
 </span>
 </span>
@@ -70,12 +420,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_5'/>
-5
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_30'/>
+30
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_5'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_30'></a>
 <span>
 </span>
 </span>
@@ -84,12 +434,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_6'/>
-6
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_31'/>
+31
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_6'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_31'></a>
 <span>
 </span>
 </span>
@@ -98,12 +448,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_7'/>
-7
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_32'/>
+32
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_7'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_32'></a>
 <span>
 </span>
 </span>
@@ -112,40 +462,54 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_8'/>
-8
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_33'/>
+33
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_8'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_33'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>         * Message applicatif de l&#39;anneau (sendLeft / sendRight).</span></pre></td></tr>
+<td class=''><pre><span  class=''>         * An application-level message going from one virtual node to another.</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_9'/>
-9
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_34'/>
+34
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_9'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_34'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>         * Champs utilis&#233;s : virtualSourceId, virtualDestId, ringSize, payload.</span></pre></td></tr>
+<td class=''><pre><span  class=''>         * Direction: VirtualNode &#8594; physicalHost &#8594; spanning tree &#8594; physicalHost &#8594; VirtualNode</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_10'/>
-10
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_35'/>
+35
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_10'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_35'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * Fields used: virtualSourceId, virtualDestId, ringSize, payload</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_36'/>
+36
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_36'></a>
 <span>
 </span>
 </span>
@@ -154,12 +518,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_11'/>
-11
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_37'/>
+37
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_11'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_37'></a>
 <span>
 </span>
 </span>
@@ -168,12 +532,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_12'/>
-12
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_38'/>
+38
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_12'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_38'></a>
 <span>
 </span>
 </span>
@@ -182,12 +546,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_13'/>
-13
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_39'/>
+39
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_13'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_39'></a>
 <span>
 </span>
 </span>
@@ -196,54 +560,68 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_14'/>
-14
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_40'/>
+40
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_14'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_40'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>         * Le n&#339;ud virtuel s&#39;enregistre aupr&#232;s d&#39;un physique h&#244;te.</span></pre></td></tr>
+<td class=''><pre><span  class=''>         * A virtual node introduces itself to a physical host.</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_15'/>
-15
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_41'/>
+41
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_15'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_41'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>         * D&#233;clenche la r&#233;ponse VIRTUAL_HEARTBEAT_ACK si le physique accepte.</span></pre></td></tr>
+<td class=''><pre><span  class=''>         * The physical host adds it to hostedVirtuals and replies with VIRTUAL_HEARTBEAT_ACK.</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_16'/>
-16
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_42'/>
+42
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_16'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_42'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>         * Champs : virtualSourceId, ringSize.</span></pre></td></tr>
+<td class=''><pre><span  class=''>         * Direction: VirtualNode &#8594; PhysicalHostService (via physical.node.&#60;id&#62;.virt queue)</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_17'/>
-17
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_43'/>
+43
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_17'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_43'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * Fields used: virtualSourceId, ringSize</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_44'/>
+44
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_44'></a>
 <span>
 </span>
 </span>
@@ -252,12 +630,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_18'/>
-18
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_45'/>
+45
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_18'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_45'></a>
 <span>
 </span>
 </span>
@@ -266,68 +644,82 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_19'/>
-19
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_46'/>
+46
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_19'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_46'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''></span></pre></td></tr>
+<td class=''><pre><span  class=''> /**</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_20'/>
-20
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_47'/>
+47
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_20'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_47'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>        /**</span></pre></td></tr>
+<td class=''><pre><span  class=''>         * Periodic keep-alive sent by a virtual node to its current physical host.</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_21'/>
-21
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_48'/>
+48
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_21'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_48'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>         * Signal de vie du virtuel vers son h&#244;te physique.</span></pre></td></tr>
+<td class=''><pre><span  class=''>         * If the physical host stops replying, the virtual node will migrate.</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_22'/>
-22
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_49'/>
+49
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_22'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_49'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>         * Champs : virtualSourceId.</span></pre></td></tr>
+<td class=''><pre><span  class=''>         * Direction: VirtualNode &#8594; PhysicalHostService</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_23'/>
-23
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_50'/>
+50
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_23'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_50'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * Fields used: virtualSourceId</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_51'/>
+51
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_51'></a>
 <span>
 </span>
 </span>
@@ -336,12 +728,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_24'/>
-24
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_52'/>
+52
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_24'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_52'></a>
 <span>
 </span>
 </span>
@@ -350,12 +742,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_25'/>
-25
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_53'/>
+53
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_25'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_53'></a>
 <span>
 </span>
 </span>
@@ -364,12 +756,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_26'/>
-26
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_54'/>
+54
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_26'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_54'></a>
 <span>
 </span>
 </span>
@@ -378,54 +770,68 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_27'/>
-27
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_55'/>
+55
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_27'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_55'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>         * R&#233;ponse du physique h&#244;te au heartbeat (ou au REGISTER).</span></pre></td></tr>
+<td class=''><pre><span  class=''>         * Acknowledgment sent by the physical host back to the virtual node.</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_28'/>
-28
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_56'/>
+56
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_28'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_56'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>         * Publi&#233;e directement dans {@code virtual.node.{virtualSourceId}}.</span></pre></td></tr>
+<td class=''><pre><span  class=''>         * Doubles as the response to both VIRTUAL_REGISTER and VIRTUAL_HEARTBEAT.</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_29'/>
-29
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_57'/>
+57
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_29'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_57'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>         * Champs : virtualSourceId (le virtuel concern&#233;), hostPhysicalId.</span></pre></td></tr>
+<td class=''><pre><span  class=''>         * Direction: PhysicalHostService &#8594; VirtualNode (via virtual.node.&#60;id&#62; queue)</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_30'/>
-30
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_58'/>
+58
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_30'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_58'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>         * Fields used: virtualSourceId, hostPhysicalId</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_59'/>
+59
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_59'></a>
 <span>
 </span>
 </span>
@@ -434,12 +840,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_31'/>
-31
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_60'/>
+60
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_31'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_60'></a>
 <span>
 </span>
 </span>
@@ -448,12 +854,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_32'/>
-32
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_61'/>
+61
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_32'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_61'></a>
 <span>
 </span>
 </span>
@@ -462,12 +868,26 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_33'/>
-33
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_62'/>
+62
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_33'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_62'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     //Message fields</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_63'/>
+63
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_63'></a>
 <span>
 </span>
 </span>
@@ -476,12 +896,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_34'/>
-34
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_64'/>
+64
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_34'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_64'></a>
 <span>
 </span>
 </span>
@@ -490,82 +910,82 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_35'/>
-35
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_65'/>
+65
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_35'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_65'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>    private int virtualSourceId;</span></pre></td></tr>
+<td class=''><pre><span  class=''>    private int virtualSourceId;// ID of the virtual node sending this envelope</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_36'/>
-36
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_66'/>
+66
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_36'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_66'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>    private int virtualDestId;</span></pre></td></tr>
+<td class=''><pre><span  class=''>    private int virtualDestId;// ID of the virtual node that should receive this (for VIRTUAL_DATA)</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_37'/>
-37
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_67'/>
+67
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_37'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_67'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>    private int ringSize;</span></pre></td></tr>
+<td class=''><pre><span  class=''>    private int ringSize;    // total number of virtual nodes in the ring (used at registration)</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_38'/>
-38
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_68'/>
+68
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_38'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_68'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>    private int hostPhysicalId;</span></pre></td></tr>
+<td class=''><pre><span  class=''>    private int hostPhysicalId; // physical node ID of the responding host (used in ACK)</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_39'/>
-39
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_69'/>
+69
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_39'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_69'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''>    private String payload;</span></pre></td></tr>
+<td class=''><pre><span  class=''>    private String payload; // the actual text content (for VIRTUAL_DATA)</span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_40'/>
-40
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_70'/>
+70
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_40'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_70'></a>
 <span>
 </span>
 </span>
@@ -574,12 +994,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_41'/>
-41
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_71'/>
+71
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_41'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_71'></a>
 <span>
 </span>
 </span>
@@ -588,26 +1008,54 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_42'/>
-42
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_72'/>
+72
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_42'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_72'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''></span></pre></td></tr>
+<td class=''><pre><span  class=''>    </span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_43'/>
-43
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_73'/>
+73
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_43'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_73'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    </span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_74'/>
+74
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_74'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     //Creates a VIRTUAL_DATA envelope: a message from one virtual node to another</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_75'/>
+75
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_75'></a>
 <span>
 </span>
 </span>
@@ -616,12 +1064,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_44'/>
-44
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_76'/>
+76
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_44'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_76'></a>
 <span>
 </span>
 </span>
@@ -630,12 +1078,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_45'/>
-45
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_77'/>
+77
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_45'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_77'></a>
 <span>
 </span>
 </span>
@@ -644,12 +1092,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_46'/>
-46
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_78'/>
+78
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_46'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_78'></a>
 <span>
 </span>
 </span>
@@ -658,12 +1106,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_47'/>
-47
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_79'/>
+79
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_47'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_79'></a>
 <span>
 </span>
 </span>
@@ -672,12 +1120,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_48'/>
-48
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_80'/>
+80
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_48'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_80'></a>
 <span>
 </span>
 </span>
@@ -686,12 +1134,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_49'/>
-49
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_81'/>
+81
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_49'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_81'></a>
 <span>
 </span>
 </span>
@@ -700,12 +1148,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_50'/>
-50
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_82'/>
+82
 </td>
 <td class='killed'>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_50'>1</a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_82'>1</a>
 <span>
 1. data : replaced return value with null for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::data &rarr; KILLED<br/>
 
@@ -716,12 +1164,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_51'/>
-51
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_83'/>
+83
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_51'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_83'></a>
 <span>
 </span>
 </span>
@@ -730,12 +1178,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_52'/>
-52
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_84'/>
+84
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_52'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_84'></a>
 <span>
 </span>
 </span>
@@ -744,12 +1192,96 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_53'/>
-53
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_85'/>
+85
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_53'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_85'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_86'/>
+86
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_86'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Creates a VIRTUAL_REGISTER envelope.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_87'/>
+87
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_87'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Sent by a virtual node when it first starts up (or after migrating to a new host).</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_88'/>
+88
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_88'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Tells the physical host &#34;I exist, please track me.&#34;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_89'/>
+89
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_89'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_90'/>
+90
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_90'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_91'/>
+91
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_91'></a>
 <span>
 </span>
 </span>
@@ -758,12 +1290,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_54'/>
-54
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_92'/>
+92
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_54'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_92'></a>
 <span>
 </span>
 </span>
@@ -772,12 +1304,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_55'/>
-55
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_93'/>
+93
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_55'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_93'></a>
 <span>
 </span>
 </span>
@@ -786,12 +1318,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_56'/>
-56
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_94'/>
+94
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_56'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_94'></a>
 <span>
 </span>
 </span>
@@ -800,12 +1332,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_57'/>
-57
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_95'/>
+95
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_57'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_95'></a>
 <span>
 </span>
 </span>
@@ -814,12 +1346,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_58'/>
-58
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_96'/>
+96
 </td>
 <td class='killed'>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_58'>1</a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_96'>1</a>
 <span>
 1. register : replaced return value with null for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::register &rarr; KILLED<br/>
 
@@ -830,12 +1362,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_59'/>
-59
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_97'/>
+97
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_59'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_97'></a>
 <span>
 </span>
 </span>
@@ -844,26 +1376,96 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_60'/>
-60
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_98'/>
+98
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_60'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_98'></a>
 <span>
 </span>
 </span>
 </td>
-<td class=''><pre><span  class=''></span></pre></td></tr>
+<td class=''><pre><span  class=''>    </span></pre></td></tr>
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_61'/>
-61
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_99'/>
+99
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_61'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_99'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_100'/>
+100
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_100'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Creates a VIRTUAL_HEARTBEAT envelope.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_101'/>
+101
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_101'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Sent periodically by a virtual node to its physical host.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_102'/>
+102
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_102'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * If the host stops responding, the virtual node migrates to another physical node.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_103'/>
+103
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_103'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_104'/>
+104
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_104'></a>
 <span>
 </span>
 </span>
@@ -872,12 +1474,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_62'/>
-62
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_105'/>
+105
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_62'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_105'></a>
 <span>
 </span>
 </span>
@@ -886,12 +1488,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_63'/>
-63
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_106'/>
+106
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_63'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_106'></a>
 <span>
 </span>
 </span>
@@ -900,12 +1502,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_64'/>
-64
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_107'/>
+107
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_64'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_107'></a>
 <span>
 </span>
 </span>
@@ -914,12 +1516,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_65'/>
-65
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_108'/>
+108
 </td>
 <td class='killed'>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_65'>1</a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_108'>1</a>
 <span>
 1. heartbeat : replaced return value with null for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::heartbeat &rarr; KILLED<br/>
 
@@ -930,12 +1532,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_66'/>
-66
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_109'/>
+109
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_66'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_109'></a>
 <span>
 </span>
 </span>
@@ -944,12 +1546,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_67'/>
-67
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_110'/>
+110
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_67'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_110'></a>
 <span>
 </span>
 </span>
@@ -958,12 +1560,96 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_68'/>
-68
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_111'/>
+111
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_68'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_111'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    /**</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_112'/>
+112
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_112'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Creates a VIRTUAL_HEARTBEAT_ACK envelope.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_113'/>
+113
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_113'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Sent by the physical host to confirm it&#39;s alive and still hosting this virtual node.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_114'/>
+114
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_114'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     * Also tells the virtual node which physical node it&#39;s currently hosted on.</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_115'/>
+115
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_115'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     */</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_116'/>
+116
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_116'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_117'/>
+117
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_117'></a>
 <span>
 </span>
 </span>
@@ -972,12 +1658,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_69'/>
-69
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_118'/>
+118
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_69'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_118'></a>
 <span>
 </span>
 </span>
@@ -986,12 +1672,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_70'/>
-70
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_119'/>
+119
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_70'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_119'></a>
 <span>
 </span>
 </span>
@@ -1000,12 +1686,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_71'/>
-71
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_120'/>
+120
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_71'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_120'></a>
 <span>
 </span>
 </span>
@@ -1014,12 +1700,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_72'/>
-72
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_121'/>
+121
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_72'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_121'></a>
 <span>
 </span>
 </span>
@@ -1028,12 +1714,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_73'/>
-73
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_122'/>
+122
 </td>
 <td class='killed'>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_73'>1</a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_122'>1</a>
 <span>
 1. heartbeatAck : replaced return value with null for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::heartbeatAck &rarr; KILLED<br/>
 
@@ -1044,12 +1730,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_74'/>
-74
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_123'/>
+123
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_74'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_123'></a>
 <span>
 </span>
 </span>
@@ -1058,12 +1744,40 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_75'/>
-75
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_124'/>
+124
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_75'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_124'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>  </span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_125'/>
+125
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_125'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>     // Getter</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_126'/>
+126
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_126'></a>
 <span>
 </span>
 </span>
@@ -1072,12 +1786,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_76'/>
-76
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_127'/>
+127
 </td>
 <td class='killed'>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_76'>1</a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_127'>1</a>
 <span>
 1. getType : replaced return value with null for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getType &rarr; KILLED<br/>
 
@@ -1088,12 +1802,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_77'/>
-77
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_128'/>
+128
 </td>
 <td class='killed'>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_77'>1</a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_128'>1</a>
 <span>
 1. getVirtualSourceId : replaced int return with 0 for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getVirtualSourceId &rarr; KILLED<br/>
 
@@ -1104,12 +1818,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_78'/>
-78
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_129'/>
+129
 </td>
 <td class='killed'>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_78'>1</a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_129'>1</a>
 <span>
 1. getVirtualDestId : replaced int return with 0 for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getVirtualDestId &rarr; KILLED<br/>
 
@@ -1120,12 +1834,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_79'/>
-79
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_130'/>
+130
 </td>
 <td class='killed'>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_79'>1</a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_130'>1</a>
 <span>
 1. getRingSize : replaced int return with 0 for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getRingSize &rarr; KILLED<br/>
 
@@ -1136,12 +1850,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_80'/>
-80
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_131'/>
+131
 </td>
 <td class='killed'>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_80'>1</a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_131'>1</a>
 <span>
 1. getHostPhysicalId : replaced int return with 0 for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getHostPhysicalId &rarr; KILLED<br/>
 
@@ -1152,12 +1866,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_81'/>
-81
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_132'/>
+132
 </td>
 <td class='killed'>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_81'>1</a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_132'>1</a>
 <span>
 1. getPayload : replaced return value with &#34;&#34; for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getPayload &rarr; KILLED<br/>
 
@@ -1168,12 +1882,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_82'/>
-82
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_133'/>
+133
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_82'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_133'></a>
 <span>
 </span>
 </span>
@@ -1182,12 +1896,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_83'/>
-83
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_134'/>
+134
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_83'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_134'></a>
 <span>
 </span>
 </span>
@@ -1196,12 +1910,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_84'/>
-84
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_135'/>
+135
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_84'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_135'></a>
 <span>
 </span>
 </span>
@@ -1210,12 +1924,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_85'/>
-85
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_136'/>
+136
 </td>
 <td class='killed'>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_85'>1</a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_136'>1</a>
 <span>
 1. toString : replaced return value with &#34;&#34; for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::toString &rarr; KILLED<br/>
 
@@ -1226,12 +1940,12 @@
 
 <tr>
 <td class='covered'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_86'/>
-86
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_137'/>
+137
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_86'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_137'></a>
 <span>
 </span>
 </span>
@@ -1240,12 +1954,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_87'/>
-87
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_138'/>
+138
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_87'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_138'></a>
 <span>
 </span>
 </span>
@@ -1254,12 +1968,12 @@
 
 <tr>
 <td class='na'>
-<a name='org.pitest.mutationtest.report.html.SourceFile@71e4af7b_88'/>
-88
+<a name='org.pitest.mutationtest.report.html.SourceFile@524105bc_139'/>
+139
 </td>
 <td class=''>
 <span class='pop'>
-<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_88'></a>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_139'></a>
 <span>
 </span>
 </span>
@@ -1271,121 +1985,121 @@
 <tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
 
 <tr>
-<td><a href='#org.pitest.mutationtest.report.html.SourceFile@71e4af7b_50'>50</a></td> 
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@524105bc_82'>82</a></td> 
 <td></td>
 <td>
 
-<a name='grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_50'/> 
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_82'/> 
 
 <p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>data<br/><b>Killed by : </b>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[test-template:data_shouldPreserveArbitraryPayloads(java.lang.String)]/[test-template-invocation:#2]</span></span> replaced return value with null for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::data &rarr; KILLED</span>
 </div> 
 </td>
 </tr>
 <tr>
-<td><a href='#org.pitest.mutationtest.report.html.SourceFile@71e4af7b_58'>58</a></td> 
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@524105bc_96'>96</a></td> 
 <td></td>
 <td>
 
-<a name='grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_58'/> 
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_96'/> 
 
 <p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>register<br/><b>Killed by : </b>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:register_shouldSetTypeSourceAndRing()]</span></span> replaced return value with null for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::register &rarr; KILLED</span>
 </div> 
 </td>
 </tr>
 <tr>
-<td><a href='#org.pitest.mutationtest.report.html.SourceFile@71e4af7b_65'>65</a></td> 
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@524105bc_108'>108</a></td> 
 <td></td>
 <td>
 
-<a name='grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_65'/> 
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_108'/> 
 
 <p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>heartbeat<br/><b>Killed by : </b>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:heartbeat_shouldSetTypeAndSource()]</span></span> replaced return value with null for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::heartbeat &rarr; KILLED</span>
 </div> 
 </td>
 </tr>
 <tr>
-<td><a href='#org.pitest.mutationtest.report.html.SourceFile@71e4af7b_73'>73</a></td> 
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@524105bc_122'>122</a></td> 
 <td></td>
 <td>
 
-<a name='grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_73'/> 
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_122'/> 
 
 <p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>heartbeatAck<br/><b>Killed by : </b>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:heartbeatAck_shouldSetTypeSourceAndHost()]</span></span> replaced return value with null for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::heartbeatAck &rarr; KILLED</span>
 </div> 
 </td>
 </tr>
 <tr>
-<td><a href='#org.pitest.mutationtest.report.html.SourceFile@71e4af7b_76'>76</a></td> 
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@524105bc_127'>127</a></td> 
 <td></td>
 <td>
 
-<a name='grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_76'/> 
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_127'/> 
 
 <p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>getType<br/><b>Killed by : </b>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:heartbeatAck_shouldSetTypeSourceAndHost()]</span></span> replaced return value with null for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getType &rarr; KILLED</span>
 </div> 
 </td>
 </tr>
 <tr>
-<td><a href='#org.pitest.mutationtest.report.html.SourceFile@71e4af7b_77'>77</a></td> 
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@524105bc_128'>128</a></td> 
 <td></td>
 <td>
 
-<a name='grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_77'/> 
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_128'/> 
 
 <p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>getVirtualSourceId<br/><b>Killed by : </b>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:heartbeatAck_shouldSetTypeSourceAndHost()]</span></span> replaced int return with 0 for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getVirtualSourceId &rarr; KILLED</span>
 </div> 
 </td>
 </tr>
 <tr>
-<td><a href='#org.pitest.mutationtest.report.html.SourceFile@71e4af7b_78'>78</a></td> 
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@524105bc_129'>129</a></td> 
 <td></td>
 <td>
 
-<a name='grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_78'/> 
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_129'/> 
 
 <p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>getVirtualDestId<br/><b>Killed by : </b>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:data_shouldSetTypeAndFields()]</span></span> replaced int return with 0 for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getVirtualDestId &rarr; KILLED</span>
 </div> 
 </td>
 </tr>
 <tr>
-<td><a href='#org.pitest.mutationtest.report.html.SourceFile@71e4af7b_79'>79</a></td> 
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@524105bc_130'>130</a></td> 
 <td></td>
 <td>
 
-<a name='grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_79'/> 
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_130'/> 
 
 <p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>getRingSize<br/><b>Killed by : </b>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:data_shouldSetTypeAndFields()]</span></span> replaced int return with 0 for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getRingSize &rarr; KILLED</span>
 </div> 
 </td>
 </tr>
 <tr>
-<td><a href='#org.pitest.mutationtest.report.html.SourceFile@71e4af7b_80'>80</a></td> 
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@524105bc_131'>131</a></td> 
 <td></td>
 <td>
 
-<a name='grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_80'/> 
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_131'/> 
 
 <p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>getHostPhysicalId<br/><b>Killed by : </b>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:heartbeatAck_shouldSetTypeSourceAndHost()]</span></span> replaced int return with 0 for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getHostPhysicalId &rarr; KILLED</span>
 </div> 
 </td>
 </tr>
 <tr>
-<td><a href='#org.pitest.mutationtest.report.html.SourceFile@71e4af7b_81'>81</a></td> 
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@524105bc_132'>132</a></td> 
 <td></td>
 <td>
 
-<a name='grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_81'/> 
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_132'/> 
 
 <p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>getPayload<br/><b>Killed by : </b>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[test-template:data_shouldPreserveArbitraryPayloads(java.lang.String)]/[test-template-invocation:#3]</span></span> replaced return value with &#34;&#34; for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::getPayload &rarr; KILLED</span>
 </div> 
 </td>
 </tr>
 <tr>
-<td><a href='#org.pitest.mutationtest.report.html.SourceFile@71e4af7b_85'>85</a></td> 
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@524105bc_136'>136</a></td> 
 <td></td>
 <td>
 
-<a name='grouporg.pitest.mutationtest.report.html.SourceFile@71e4af7b_85'/> 
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@524105bc_136'/> 
 
 <p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>toString<br/><b>Killed by : </b>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:toString_shouldContainTypeAndIds()]</span></span> replaced return value with &#34;&#34; for fr/uga/im2ag/m1info/virtual/VirtualEnvelope::toString &rarr; KILLED</span>
 </div> 
@@ -1413,7 +2127,7 @@
 
 <h2>Tests examined</h2>
 <ul>
-<li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:toString_shouldContainTypeAndIds()] (1 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest]/[method:toString_shouldNotThrowForAnyType()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:heartbeatAck_shouldSetTypeSourceAndHost()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:heartbeat_shouldSetTypeAndSource()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:data_shouldSetTypeAndFields()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:register_shouldSetTypeSourceAndRing()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest]/[method:heartbeat_envelope_shouldHaveCorrectType()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest]/[method:virtualEnvelopeData_shouldCarryCorrectSourceAndDestination()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest]/[method:register_envelope_shouldHaveCorrectTypeAndRing()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest]/[method:heartbeatAck_envelope_shouldHaveCorrectTypeAndHost()] (0 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:duplicateRegisterCommand_shouldKeepHostedVirtualsDeduplicated()] (4 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:virtualDataCommand_shouldForwardBroadcastPayloadToSpanningTreeManager()] (5 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:heartbeatCommand_shouldSendAckWithoutAddingHostedVirtual()] (6 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:registerCommand_shouldTrackHostedVirtualAndSendHeartbeatAck()] (8 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:virtualPayloadShouldBeDeliveredToHostedLocalVirtualQueue()] (8 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:hostedVirtualsSnapshotShouldBeUnmodifiableAndIndependent()] (305 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:virtualPayloadForUnhostedDestinationShouldNotBePublished()] (3 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[test-template:data_shouldPreserveArbitraryPayloads(java.lang.String)]/[test-template-invocation:#2] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[test-template:data_shouldPreserveArbitraryPayloads(java.lang.String)]/[test-template-invocation:#3] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:data_shouldAcceptNullPayload()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[test-template:data_shouldPreserveArbitraryPayloads(java.lang.String)]/[test-template-invocation:#1] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:data_shouldAcceptEmptyPayload()] (0 ms)</li>
+<li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:toString_shouldContainTypeAndIds()] (4 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest]/[method:toString_shouldNotThrowForAnyType()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:heartbeatAck_shouldSetTypeSourceAndHost()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:heartbeat_shouldSetTypeAndSource()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:data_shouldSetTypeAndFields()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:register_shouldSetTypeSourceAndRing()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest]/[method:heartbeat_envelope_shouldHaveCorrectType()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest]/[method:virtualEnvelopeData_shouldCarryCorrectSourceAndDestination()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest]/[method:register_envelope_shouldHaveCorrectTypeAndRing()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualNodeUnitTest]/[method:heartbeatAck_envelope_shouldHaveCorrectTypeAndHost()] (0 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:virtualDataCommand_shouldForwardBroadcastPayloadToSpanningTreeManager()] (4 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:duplicateRegisterCommand_shouldKeepHostedVirtualsDeduplicated()] (5 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:heartbeatCommand_shouldSendAckWithoutAddingHostedVirtual()] (4 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:registerCommand_shouldTrackHostedVirtualAndSendHeartbeatAck()] (3 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:virtualPayloadShouldBeDeliveredToHostedLocalVirtualQueue()] (10 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:hostedVirtualsSnapshotShouldBeUnmodifiableAndIndependent()] (312 ms)</li><li>fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.physical.PhysicalHostServiceUnitTest]/[method:virtualPayloadForUnhostedDestinationShouldNotBePublished()] (2 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[test-template:data_shouldPreserveArbitraryPayloads(java.lang.String)]/[test-template-invocation:#2] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[test-template:data_shouldPreserveArbitraryPayloads(java.lang.String)]/[test-template-invocation:#3] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:data_shouldAcceptNullPayload()] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[test-template:data_shouldPreserveArbitraryPayloads(java.lang.String)]/[test-template-invocation:#1] (0 ms)</li><li>fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest.[engine:junit-jupiter]/[class:fr.uga.im2ag.m1info.virtual.VirtualEnvelopeTest]/[method:data_shouldAcceptEmptyPayload()] (0 ms)</li>
 </ul>
 
 <br/>
