@@ -71,6 +71,7 @@ public class NetworkConfig {
      *
      * @param path the path to the JSON configuration file
      * @return a NetworkConfig instance representing the physical network topology
+     * @throws IOException if there is an error reading the file
      */
     public static NetworkConfig fromFile(Path path) throws IOException {
         try (Reader reader = Files.newBufferedReader(path)) {
@@ -125,6 +126,7 @@ public class NetworkConfig {
 
     /**
      * Returns the total number of nodes in the physical network
+     * @return the node count
      */
     public int getNodeCount() {
         return nodeCount;
@@ -132,6 +134,8 @@ public class NetworkConfig {
 
     /**
      * Validates that the given nodeId is within the valid range [0, nodeCount-1]
+     * @param nodeId the node ID to validate
+     * @throws IllegalArgumentException if nodeId is out of bounds
      */
     public void validateNodeId(int nodeId) throws IllegalArgumentException {
         if (nodeId < 0 || nodeId >= nodeCount) {
