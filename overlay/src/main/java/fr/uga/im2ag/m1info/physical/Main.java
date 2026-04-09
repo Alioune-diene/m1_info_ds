@@ -6,9 +6,33 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The main class for the physical node application.
+ * This class is responsible for:
+ * <ul>
+ *   <li>Parsing command-line arguments</li>
+ *   <li>Loading the network configuration</li>
+ *   <li>Initializing the PhysicalNode and SpanningTreeManager</li>
+ *   <li>Handling user input to send messages or check status</li>
+ * </ul>
+ */
 public class Main {
     private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
+    /**
+     * No instance of Main is needed since all methods are static, but defined to remove default constructor warning for Javadoc
+     */
+    public Main() {
+        // No instance needed since all methods are static
+    }
+
+    /**
+     * The entry point of the application.
+     * Expects command-line arguments: {@code <nodeId> <configFile> [rabbitHost]}
+     * Initializes the physical node and starts the main loop to handle user commands.
+     *
+     * @param args the command-line arguments
+     */
     public static void main(String[] args) {
         if (args.length < 2) {
             System.err.println("Usage: java -jar distributed-ring-runnable.jar" + " <nodeId> <configFile> [rabbitHost]");
@@ -73,6 +97,22 @@ public class Main {
         System.out.printf("=== Physical node %d started. Neighbors: %s ===%n", nodeId, neighbors);
         System.out.println("Commandes : 'send <dst> <message>'  |  'status'  |  'quit'");
 
+        handleUserInput(nodeId, manager, hostService, node);
+    }
+
+    /**
+     * Handles user input from the console in a loop.
+     * Recognizes commands to send messages, check status, or quit the application.
+     * Uses the SpanningTreeManager to send messages and retrieve status information.
+     * Ensures that resources are properly closed when quitting.
+     *
+     * @param nodeId      the ID of the current node (used for logging)
+     * @param manager     the SpanningTreeManager instance used to send messages and get status
+     * @param hostService the PhysicalHostService instance used to get hosted virtuals count
+     * @param node        the PhysicalNode instance used to close connections on quit
+     */
+    private static void handleUserInput(int nodeId, SpanningTreeManager manager, PhysicalHostService hostService, PhysicalNode node)
+    {
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.print("> ");
@@ -102,6 +142,15 @@ public class Main {
         }
     }
 
+    /**
+     * Handles the 'send' command entered by the user.
+     * Parses the command to extract the destination node ID and the message payload.
+     * Validates the input and uses the SpanningTreeManager to send the message.
+     *
+     * @param line the full command line entered by the user
+     * @param nodeId the ID of the current node (used for logging)
+     * @param manager the SpanningTreeManager instance used to send the message
+     */
     private static void handleSendCommand(String line, int nodeId, SpanningTreeManager manager) {
         String[] parts = line.split(" ", 3);
         if (parts.length < 3) { System.err.println("Usage : send <dstId> <message>"); return; }
