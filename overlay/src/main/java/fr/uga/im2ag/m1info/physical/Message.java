@@ -41,6 +41,7 @@ public class Message {
 
     /**
      * Getters for the message fields. No setters since messages are immutable after creation.
+     * @return The unique identifier of this message.
      */
     public String getMessageId() {
         return messageId;
@@ -48,6 +49,7 @@ public class Message {
 
     /**
      * Getters for the message fields. No setters since messages are immutable after creation.
+     * @return The ID of the node that originally created this message.
      */
     public int getSourceId() {
         return sourceId;
@@ -55,12 +57,17 @@ public class Message {
 
     /**
      * Getters for the message fields. No setters since messages are immutable after creation.
+     * @return The ID of the node this message is meant to reach.
      */
     public int getDestinationId() {
         return destinationId;
     }
 
-    /** Getters for the message fields. No setters since messages are immutable after creation. */
+    /**
+     * Getters for the message fields. No setters since messages are immutable after creation.
+     *
+     * @return The actual content of the message.
+     */
     public String getPayload() { return payload; }
 
     @Override
