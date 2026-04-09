@@ -98,6 +98,8 @@ jobs:
               --manifest "$REPORTS_FILE" \
               --remove-branch "$SAFE_BRANCH"
           fi
+          
+          rm -rf main-repo
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
