@@ -93,6 +93,7 @@ public class PhysicalHostService implements MessageHandler {
      * @param physicalId  ID of the hosting physical node
      * @param manager     the spanning tree manager (for broadcasting virtual data)
      * @param connection  the RabbitMQ connection (shared with PhysicalNode)
+     * @throws IOException if there is an error setting up the RabbitMQ channel or queues
      */
     public PhysicalHostService(int physicalId, SpanningTreeManager manager, Connection connection) throws IOException {
         this.physicalId = physicalId;
@@ -123,6 +124,7 @@ public class PhysicalHostService implements MessageHandler {
 
     /**
      * Set a fallback handler for non-virtual application messages.
+     * @param appHandler the MessageHandler to call for non-virtual messages (can be null)
      */
     public void setAppHandler(MessageHandler appHandler) {
         this.appHandler = appHandler;
@@ -232,6 +234,7 @@ public class PhysicalHostService implements MessageHandler {
     /**
      * Helper to get the set of virtual node IDs currently hosted on this physical node.
      * Used by PhysicalNode to know which virtual nodes are running here (for migration decisions).
+     * @return an unmodifiable set of hosted virtual node IDs
      */
     public Set<Integer> getHostedVirtuals() {
         return Set.copyOf(hostedVirtuals);
