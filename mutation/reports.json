@@ -1,12 +1,4 @@
 {
-  "reports": [
-    {
-      "name": "Documentation",
-      "url": "../pit/Documentation/overlay/target/pit-reports/index.html"
-    },
-    {
-      "name": "main",
-      "url": "../pit/main/overlay/target/pit-reports/index.html"
-    }
-  ]
+  "reports": []
 }
+
