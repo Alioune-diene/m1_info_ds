@@ -14,17 +14,61 @@ import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Represents a physical overlay node backed by RabbitMQ queues.
+ * <p>
+ * Each node:
+ * <ul>
+ *   <li>owns a dedicated queue named {@code physical.node.&lt;id&gt;},</li>
+ *   <li>can consume JSON-serialized {@link Envelope} messages from that queue,</li>
+ *   <li>can publish messages to queues of its declared neighbors.</li>
+ * </ul>
+ * <p>
+ * The class encapsulates connection/channel lifecycle and exposes helper
+ * methods for unicast and broadcast sends.
+ */
 public class PhysicalNode implements AutoCloseable {
     private static final Logger LOG = Logger.getLogger(PhysicalNode.class.getName());
 
+    /**
+     * Prefix used to build node queue names.
+     * Full queue name format: {@code physical.node.<nodeId>}.
+     */
     public static final String QUEUE_PREFIX = "physical.node.";
 
+    /**
+     * Unique identifier of this node in the physical topology.
+     */
     private final int id;
+
+    /** Immutable list of neighbor node IDs this node is allowed to send to. */
     private final List<Integer> neighbors;
+
+    /** JSON serializer/deserializer used for {@link Envelope} payloads. */
     private final Gson gson = new Gson();
+
+    /** RabbitMQ TCP connection owned by this node. */
     private final Connection connection;
+
+    /** RabbitMQ channel used for queue declaration, publish, and consume. */
     private final Channel channel;
 
+    /**
+     * Creates and initializes a physical node.
+     * <p>
+     * Initialization includes:
+     * <ol>
+     *   <li>copying neighbor IDs into an immutable list,</li>
+     *   <li>opening a RabbitMQ connection and channel,</li>
+     *   <li>declaring this node's queue.</li>
+     * </ol>
+     *
+     * @param id node identifier
+     * @param neighbors list of neighbor node IDs this node can directly contact
+     * @param rabbitHost RabbitMQ host name or IP address
+     * @throws IOException if queue declaration or broker communication fails
+     * @throws TimeoutException if connection/channel creation times out
+     */
     public PhysicalNode(int id, List<Integer> neighbors, String rabbitHost) throws IOException, TimeoutException {
         this.id = id;
         this.neighbors = List.copyOf(neighbors);
@@ -40,6 +84,18 @@ public class PhysicalNode implements AutoCloseable {
         LOG.info(() -> "Node " + id + " ready - neighbors : " + neighbors + " - queue : " + myQueue());
     }
 
+    /**
+     * Starts consuming messages from this node's queue.
+     * <p>
+     * Incoming messages are deserialized from UTF-8 JSON into {@link Envelope}
+     * instances and forwarded to the provided callback. The second callback argument
+     * is the sender ID extracted from the envelope.
+     * <p>
+     * Consumption uses auto-ack mode.
+     *
+     * @param callback handler invoked for each received envelope and sender ID
+     * @throws IOException if consumer registration fails
+     */
     public void startListening(BiConsumer<Envelope, Integer> callback) throws IOException {
         DeliverCallback deliverCallback = (tag, delivery) -> {
             String json = new String(delivery.getBody(), StandardCharsets.UTF_8);
@@ -50,6 +106,17 @@ public class PhysicalNode implements AutoCloseable {
         LOG.info(() -> "Node " + id + " started listening on queue " + myQueue());
     }
 
+    /**
+     * Sends a message to a specific neighbor.
+     * <p>
+     * The method enforces topology constraints by refusing sends to non-neighbors.
+     * The message is serialized as JSON and published to the destination node queue.
+     *
+     * @param neighborId destination node ID (must be present in {@link #neighbors})
+     * @param env envelope to send
+     * @throws IllegalArgumentException if {@code neighborId} is not a declared neighbor
+     * @throws IOException if publish operation fails
+     */
     public void sendToNeighbor(int neighborId, Envelope env) throws IOException {
         if (!neighbors.contains(neighborId)) { throw new IllegalArgumentException(neighborId + " is not a neighbor of " + id); }
         String json = gson.toJson(env);
@@ -57,6 +124,12 @@ public class PhysicalNode implements AutoCloseable {
         LOG.fine(() -> String.format("  %d -> %d | %s", id, neighborId, env));
     }
 
+    /**
+     * Broadcasts an envelope to all declared neighbors.
+     * Failures are handled per-neighbor: one send error is logged and does not prevent attempting remaining neighbors.
+     *
+     * @param env envelope to broadcast
+     */
     public void broadcast(Envelope env) {
         for (int n : neighbors) {
             try {
@@ -67,12 +140,30 @@ public class PhysicalNode implements AutoCloseable {
         }
     }
 
-    public int getId() { return id; }
+    /**
+     * Returns this node identifier.
+     * @return node ID
+     */
+    public int getId() { return id;
+    }
 
-    public List<Integer> getNeighbors() { return neighbors; }
+    /**
+     * Returns the immutable list of neighbor IDs.
+     * @return neighbor IDs
+     */
+    public List<Integer> getNeighbors() { return neighbors;
+    }
 
-    public Connection getConnection() { return connection; }
+    /**
+     * Exposes the underlying RabbitMQ connection.
+     * @return active connection instance
+     */
+    public Connection getConnection() { return connection;
+    }
 
+    /**
+     * Closes channel and connection if still open.
+     */
     @Override
     public void close() {
         try {
@@ -84,5 +175,9 @@ public class PhysicalNode implements AutoCloseable {
         }
     }
 
+    /**
+     * Builds this node's queue name.
+     * @return queue name for this node
+     */
     private String myQueue() { return QUEUE_PREFIX + id; }
 }
