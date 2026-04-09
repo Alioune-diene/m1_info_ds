@@ -204,6 +204,7 @@ public final class Envelope {
      * Triggered when a node detects that one of its tree neighbors has died.
      * Broadcast to all neighbors to initiate a full re-election and tree rebuild.
      *
+     * @param senderId the ID of the node sending this topology rebuild signal
      * @param newTreeVersion incremented version number to invalidate all old messages
      * @return a new Envelope instance representing the topology rebuild signal
      */
@@ -238,14 +239,68 @@ public final class Envelope {
     }
 
     // -------------------- Getters ------------------------------------------------------------------------------------
-    public Type getType() { return type; }
-    public int getSenderId() { return senderId; }
-    public int getTreeVersion() { return treeVersion; }
-    public int getRootCandidateId() { return rootCandidateId; }
-    public int getLevel() { return level; }
-    public String getMessageId() { return messageId; }
-    public int getDataSourceId() { return dataSourceId; }
-    public int getDataDestId() { return dataDestId; }
+
+    /**
+     * Gets the type of this envelope, which determines how it should be processed by the receiving node.
+     *
+     * @return the type of this envelope, which determines how it should be processed
+     */
+    public Type getType() { return type;
+    }
+
+    /**
+     * Gets the ID of the node that last forwarded this envelope.
+     * @return the ID of the node that last forwarded this envelope
+     */
+    public int getSenderId() { return senderId;
+    }
+
+    /**
+     * Gets the current tree version associated with this envelope, which helps receiving nodes detect and ignore stale messages from previous tree builds.
+     * @return the current tree version associated with this envelope
+     */
+    public int getTreeVersion() { return treeVersion;
+    }
+
+    /**
+     * Gets the ID of the best root candidate seen so far, which is used during the election and tree discovery phases to determine the elected root node.
+     * @return the ID of the best root candidate seen so far
+     */
+    public int getRootCandidateId() { return rootCandidateId;
+    }
+
+    /**
+     * Gets the BFS level (distance from root) associated with this envelope, which is used during the tree discovery phase to help build the tree structure.
+     * @return the BFS level (distance from root) associated with this envelope
+     */
+    public int getLevel() { return level;
+    }
+
+    /**
+     * Gets the unique identifier of this message, which is used for duplicate suppression when routing data messages through the spanning tree.
+     * @return the unique identifier of this message
+     */
+    public String getMessageId() { return messageId;
+    }
+
+    /**
+     * Gets the original source node ID of this message, which is used for routing data messages through the spanning tree to ensure they reach their intended destination.
+     * @return the original source node ID of this message
+     */
+    public int getDataSourceId() { return dataSourceId;
+    }
+
+    /**
+     * Gets the intended destination node ID for this message, which is used for routing data messages through the spanning tree to ensure they reach their intended destination.
+     * @return the intended destination node ID for this message
+     */
+    public int getDataDestId() { return dataDestId;
+    }
+
+    /**
+     * Gets the actual content of the message being sent, which is the payload of application-level data messages routed through the spanning tree.
+     * @return the actual content of the message being sent
+     */
     public String getPayload() { return payload; }
 
     @Override
