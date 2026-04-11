@@ -4,7 +4,9 @@ import fr.uga.im2ag.m1info.physical.NetworkConfig;
 
 import java.nio.file.Path;
 import java.util.Scanner;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Entry point for running a virtual node.
  *
@@ -23,7 +25,15 @@ import java.util.logging.*;
 public class VirtualMain {
 
     private static final Logger LOG = Logger.getLogger(VirtualMain.class.getName());
-       /**
+
+    /**
+     * No instance of VirtualMain is needed since all methods are static, but defined to remove default constructor warning for Javadoc
+     */
+    public VirtualMain() {
+        // No instance needed since all methods are static
+    }
+
+    /**
      * Application entry point. Parses arguments, loads the network configuration,
      * creates and starts the virtual node, then runs an interactive CLI loop.
      *
@@ -31,7 +41,7 @@ public class VirtualMain {
      *             {@code <virtualId> <ringSize> <configFile> [rabbitHost]}
      */
     public static void main(String[] args) {
-         //Step 1: Parse command-line arguments 
+        //Step 1: Parse command-line arguments
         if (args.length < 3) {
             System.err.println("Usage: virtual.VirtualMain <virtualId> <ringSize> <configFile> [rabbitHost]");
             System.exit(1);
@@ -45,11 +55,9 @@ public class VirtualMain {
         if (ringSize < 2) { System.err.println("ringSize >= 2 required."); System.exit(1); }
         if (virtualId < 0 || virtualId >= ringSize) { System.err.println("virtualId out of bounds [0, ringSize)."); System.exit(1); }
 
-        // Step 2: Find out how many physical nodes exist 
-
+        // Step 2: Find out how many physical nodes exist
         // We need numPhysical to know which physical node to connect to initially
         // (initial host = virtualId % numPhysical) and to try alternatives during migration
-
         int numPhysical;
         try {
             numPhysical = NetworkConfig.fromFile(configPath).getNodeCount();
@@ -58,8 +66,8 @@ public class VirtualMain {
             System.exit(1);
             return;
         }
-         //Step 3: Create and start the virtual node 
 
+        //Step 3: Create and start the virtual node
         VirtualNode vnode;
         try {
             vnode = new VirtualNode(virtualId, ringSize, numPhysical, rabbitHost);
@@ -68,12 +76,12 @@ public class VirtualMain {
             System.exit(1);
             return;
         }
+
         // Register a shutdown hook to cleanly close RabbitMQ connections on Ctrl+C
-
         Runtime.getRuntime().addShutdownHook(new Thread(vnode::close));
-         // Start the virtual node: begin listening, register with host, start heartbeats
-        // The handler just prints incoming messages to the console
 
+        // Start the virtual node: begin listening, register with host, start heartbeats
+        // The handler just prints incoming messages to the console
         try {
             vnode.start((srcId, payload) -> System.out.printf("%n[V%d] <- V%d : \"%s\"%n> ", virtualId, srcId, payload));
         } catch (Exception e) {
@@ -82,10 +90,9 @@ public class VirtualMain {
             System.exit(1);
             return;
         }
-         // Step 4: Interactive CLI 
 
+        // Step 4: Interactive CLI
         // Print a welcome banner showing ring neighbors
-
         System.out.printf("=== Virtual node %d / ring of %d  (hosted on P%d) ===%n", virtualId, ringSize, numPhysical);
         System.out.printf("    Neighbor : left=V%d  right=V%d%n", (virtualId - 1 + ringSize) % ringSize, (virtualId + 1) % ringSize);
         System.out.println("Commands : 'right <msg>'  |  'left <msg>'  |  'status'  |  'quit'");
