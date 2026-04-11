@@ -8,20 +8,28 @@ import java.util.logging.*;
 /**
  * Entry point for running a virtual node.
  *
- * Each virtual node is a separate process that sits on TOP of the physical network.
- * Virtual nodes form a logical ring they only know about their left and right neighbors.
- * They don't know or care which physical nodes exist underneath.
+ * <p>Each virtual node is a separate JVM process that sits on top of the physical network.
+ * Virtual nodes form a logical ring — they only know about their left and right neighbors.
+ * They do not know (or care) which physical nodes exist underneath.
  *
- * Available CLI commands:
- *  - "right <msg>"  → send message to the virtual node immediately to the right (V(id+1))
- *  - "left <msg>"   → send message to the virtual node immediately to the left (V(id-1))
- *  - "status"       → show current host and heartbeat timing info
- *  - "quit"         → shut down cleanly
+ * <p>Available CLI commands:
+ * <ul>
+ *     <li>{@code right <msg>} — send a message to the virtual node immediately to the right (V(id+1))</li>
+ *     <li>{@code left <msg>}  — send a message to the virtual node immediately to the left (V(id-1))</li>
+ *     <li>{@code status}      — show current host and heartbeat timing info</li>
+ *     <li>{@code quit}        — shut down cleanly</li>
+ * </ul>
  */
 public class VirtualMain {
 
     private static final Logger LOG = Logger.getLogger(VirtualMain.class.getName());
-
+       /**
+     * Application entry point. Parses arguments, loads the network configuration,
+     * creates and starts the virtual node, then runs an interactive CLI loop.
+     *
+     * @param args command-line arguments in the form:
+     *             {@code <virtualId> <ringSize> <configFile> [rabbitHost]}
+     */
     public static void main(String[] args) {
          //Step 1: Parse command-line arguments 
         if (args.length < 3) {
@@ -104,12 +112,13 @@ public class VirtualMain {
         }
     }
 
-     /**
-     * Parses a "right <msg>" or "left <msg>" command and sends the message.
+   /**
+     * Parses a {@code right <msg>} or {@code left <msg>} command and sends the message.
      *
      * @param line  the full command line typed by the user
      * @param vnode the virtual node to send from
-     * @param right true = sendRight, false = sendLeft
+     * @param right {@code true} to send right via {@link VirtualNode#sendRight},
+     *              {@code false} to send left via {@link VirtualNode#sendLeft}
      */
     private static void send(String line, VirtualNode vnode, boolean right) {
         String[] parts = line.split(" ", 2);
