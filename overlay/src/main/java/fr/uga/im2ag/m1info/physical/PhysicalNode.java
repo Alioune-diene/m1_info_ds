@@ -75,6 +75,8 @@ public class PhysicalNode implements AutoCloseable {
 
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(rabbitHost);
+        factory.setUsername("root");
+        factory.setPassword("root");
 
         this.connection = factory.newConnection("node-" + id);
         this.channel = connection.createChannel();

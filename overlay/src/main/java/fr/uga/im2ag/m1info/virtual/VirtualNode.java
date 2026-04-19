@@ -1,13 +1,17 @@
 package fr.uga.im2ag.m1info.virtual;
 
 import com.google.gson.Gson;
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.DeliverCallback;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A virtual node — a logical node that lives on top of the physical network.
@@ -148,6 +152,8 @@ public class VirtualNode implements AutoCloseable {
 
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(rabbitHost);
+        factory.setUsername("root");
+        factory.setPassword("root");
         this.connection = factory.newConnection("virt-" + virtualId);
         this.channel = connection.createChannel();
 

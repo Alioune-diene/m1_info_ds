@@ -17,7 +17,7 @@
 set -euo pipefail
 
 CONFIG="config.json"
-RABBIT="localhost"
+RABBIT="10.225.252.115"
 RING_SIZE=""
 DELAY_S=0.5
 LAUNCH_VIRTUAL=true
